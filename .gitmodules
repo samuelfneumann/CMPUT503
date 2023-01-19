@@ -1,0 +1,3 @@
+[submodule "Code/duckie-template"]
+	path = Code/duckie-template
+	url = git@github.com:samuelfneumann/duckie-template.git

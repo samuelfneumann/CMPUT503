@@ -1,0 +1,455 @@
+\documentclass[13pt]{article}
+
+\usepackage{amsmath}
+\usepackage{bm}
+
+\title{CMPUT503: Experimental Mobile Robotics}
+\author{Samuel Neumann}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+\hfill  \textbf{Thu 05 Jan 2023}
+
+\hfill \\
+
+\noindent
+\textbf{Goals}: appreciate robotics, and understand what is possible and how, get all the basic knowledge you need in
+this class to jump into a robotics job (i.e. pass interviews)
+
+\hfill \\
+\noindent
+Math is not the focus of this course.
+
+\hfill \\
+\noindent
+If you do the work, you get the grade. But, you probably will have to come into the lab after lab hours (i.e. more than
+3 in-lab hours)
+
+\hfill \\
+\noindent
+Cut corners wherever you can, use already-built packages for assignments/labs
+
+\hfill \\
+\noindent
+Lowest two lab grades will get dropped!
+
+\hfill \\
+\noindent
+Look into DuckieTown before the first lab.
+
+\hfill \\
+
+\section{Robot Architecture and Locomotion}%
+\hfill \textbf{Tue 10 Jan 2023} \\
+
+\noindent
+\textit{Architecture} can be thought of as the interaction of hardware and software.
+
+\subsection{Architectures}%
+\noindent
+\begin{itemize}
+	\item Reactive Architecture
+	\begin{itemize}
+		\item \textit{Actions} are directly triggered by \textit{sensors}.
+		\item No representations of the environment
+		\item Predefined, fixed response to situation
+		\item \textit{Fast} response to changes in the environment
+		\item Limitations: no memory (unable to count), low computing power, no machine learning, knowledge of the world
+			is limited by the range of its sensors, cannot \textit{undo} and incorrect action, not possible to plan
+			ahead, unable to recover from actions which fail silently, etc.
+	\end{itemize}
+	\item Deliberative Architecture
+	\begin{itemize}
+		\item Organized by decomposing the required system functionality into \textit{concurrent modules} or components
+		\item Problems: overall complexity of the system may grow, hard to offer real-time guarantees on performance
+		\begin{itemize}
+			\item Solving any given problem takes longer than an equivalent \textit{reactive} implementation
+			\item Solving different problems take different amount of time
+		\end{itemize}
+	\end{itemize}
+	\item Subsumption Architecture
+	\item ROS?
+\end{itemize}
+
+\noindent
+\textit{Temporal Decomposition} distinguishes between processes that have varying real-time and non-real-time demands
+
+\noindent
+\textbf{If you fail to meet a hard real-time requirement, then your system is broken.} E.g.: driving off a cliff.
+
+\textbf{Rodney A. Brooks}: tried to make a realistic robot with the abilities of an insect. He developed the \textit{subsumption
+architecture}. This architecture puts different importance/prioritization on different tasks. E.g. I really don't want
+to fall off the cliff, but if I'm not falling off a cliff, then don't bump into any objects, etc.
+
+\subsection{What is ROS?}%
+\noindent
+\begin{itemize}
+	\item A \textit{meta} operating system for robots
+	\item An \textbf{architecture} for distribution inter-process/inter-machine communication and configuration
+	\item ROS isa \textit{peer-to-peer} robot middleware package
+	\item In ROS, all major functionality is broken into nodes that communicate with each other using messages sent
+		on topics
+	\item \textbf{Not} a programming language
+	\item \textbf{Not} a \textit{hard real-time} architecture
+	\item ...
+\end{itemize}
+
+\subsubsection{ROS Nodes}%
+\noindent
+\begin{itemize}
+	\item \textbf{Node}: a process that performs some computation
+	\item Typically we try to divide the entire software into different modules -- eac hon ei srun onver a single or
+		multiple nodes.
+	\item  Nodes are combined together into graph and communicated with each other using streaming topics. Nodes
+		\textbf{do not} communicate with each other directly, otherwise we get into the craziness and complicationes of
+		the other architectures.
+\end{itemize}
+
+\subsubsection{ROS Topics}%
+\noindent
+\begin{itemize}
+	\item \textbf{Topic}: named buses over which nodes exchange messages to ROS master
+	\item Topics have \textbf{anonymous} publish/subscribe semantics
+	\item Can be \textit{multiple} publisher and subscribers to a topic
+	\item Strongly typed
+\end{itemize}
+
+\subsubsection{ROS Messages}%
+\noindent
+\begin{itemize}
+	\item \textbf{Message}: is a simple data structure, comprising typed fields.
+	\item Can contain headers with metadata
+\end{itemize}
+
+\section{Locomotion}%
+\noindent
+\textbf{Locomotion}: enabling robots to move
+
+\hfill
+
+\noindent
+Wheel locomotion is simple, safer, and stable:
+
+\hfill
+
+\noindent
+\textbf{Key issues for wheeled locomotion}:
+\begin{itemize}
+	\item Stability
+	\begin{itemize}
+		\item Number and geometry of contact points
+		\item Centre of gravity
+		\item Static/dynamic stability
+		\item Inclination of terrain
+	\end{itemize}
+	\item Characteristics of contact
+	\begin{itemize}
+		\item Contact point/path size and shape
+		\item Angle of contact
+		\item Friction
+	\end{itemize}
+	\item Type of environment
+\end{itemize}
+
+\hfill
+
+\noindent
+\textbf{Legged mobile robots} can adapt to human terrain, but they have lots of limitations: power and mechanical complexity,
+high degrees of freedom, control system complexity, etc.
+
+\subsection{Leg Locomotion}%
+\noindent
+\textbf{Degree of Freedom} (DOF): joints or axes in motion
+
+\hfill
+
+\noindent
+A minimum of two DOFs is required to move a leg forward, but usually legs have three degrees of freedom. A fourth DOF is
+needed for the angle joint, which might improve walking.
+
+\hfill
+
+\noindent
+As you add more DOFs, the complexity of the system increases very fast.
+
+\hfill
+
+\noindent
+Arms need 6 or 7 DOFs.
+
+\hfill
+
+\noindent
+\textit{Often, clever mechanical design can perform the same operations as complex active control circuitry.}
+
+\hfill \\ \hfill \\
+
+\hfill \textbf{Thu 12 Jan 2023}
+
+\noindent
+\textbf{Gait control}: how legs are coordinated for movement, e.g. crawl, trot, pace, bound, pronk, gallop, etc.
+
+\hfill \\
+\noindent
+Number of gaits is $(2k - 1)!$ where $k$ is the number of legs.
+
+\hfill \\
+\noindent
+\textbf{Cost of transportation}:
+\begin{itemize}
+	\item How much energy a robot uses to travel a certain distance
+	\item Usually normalized by the robot weight
+	\item Measured in $\frac{J}{N-m}$
+	\item Driving on wheels has very low cost of transportation.
+\end{itemize}
+
+\hfill \\
+\noindent
+Legged robot control should be designed to better exploit the dynamics of the system. For example passive dynamic
+walking.
+
+\subsection{Wheeled Mobile Robots}%
+\noindent
+Wheels are \textit{the most popular locomotion mechanisms}:
+\begin{itemize}
+	\item Highly efficient
+	\item Simple mechanical implementation
+	\item Balancing is not \textit{usually} a problem, but a suspension system is needed to allow all wheel to maintain
+		ground contact on uneven terrain.
+\end{itemize}
+
+\hfill \\
+\noindent
+We will focus on:
+\begin{itemize}
+	\item Traction
+	\item Stability
+	\item Maneuverability
+	\item Control -- we will mostly focus on this
+\end{itemize}
+
+\hfill \\
+\noindent
+Wheel Designs:
+\begin{itemize}
+	\item Standard wheels
+	\begin{itemize}
+		\item 2 DOFs
+	\end{itemize}
+	\item Castor wheels
+	\begin{itemize}
+		\item 2 DOFs
+		\item Can move while the contact point of the wheel stays the same.
+		\item If something is super heavy, it's easier to get momentum with these wheels
+		\item Harder to control
+	\end{itemize}
+	\item Swedish (Omni) wheels
+	\begin{itemize}
+		\item 3 DOFs
+	\end{itemize}
+	\item Ball or spherical wheel
+	\begin{itemize}
+		\item 3 DOFs
+		\item Balled computer mice used these
+		\item Suspension issue -- hard to get suspension on these
+	\end{itemize}
+\end{itemize}
+
+\hfill \\
+\noindent
+Stability of a vehicle is guaranteed with 3 wheels -- centre of gravity is required to be within the triangle formed by
+ground contact points of wheels.
+
+\hfill\\
+\noindent
+Stability is improved by 4 and more wheels
+
+\hfill \\
+\noindent
+\textbf{Holonomic}: can move in any direction
+
+\hfill \\
+\noindent
+Combining \textbf{actuation} and \textbf{steering} on one wheel makes design complex and adds additional errors for
+odometry.
+
+\hfill \\
+\noindent
+Static stability with two wheels can be achieved by \textbf{ensuring centre of mass is below the wheel axis} or by using
+fancy controllers.
+
+\subsection{Motion Control}%
+\begin{itemize}
+	\item Kinematic/dynamic model of the robot comes in here
+	\item Model the interaction between the wheel and ground
+	\item Definition of required motion -- which motion is required:
+	\begin{itemize}
+		\item Speed control
+		\item Position control
+	\end{itemize}
+	\item Control law that satisfies the requirements
+\end{itemize}
+
+\hfill \\
+\noindent
+\textbf{Kinematics}: Description of mechanical behaviour of the robot for design and control. E.g. hwo a robot will move
+given motor inputs.
+
+\hfill \\
+\noindent
+\textbf{Mobile robots} can move unbounded with respect to their enviornment:
+\begin{itemize}
+	\item No direct way to measure robot's position
+	\item Position must be integrated over time
+	\item Leads to inaccuracies of the position (motion) estimate
+\end{itemize}
+
+\hfill \\
+\noindent
+Some important definitions:
+\begin{itemize}
+	\item \textbf{Configuration}: complete specification of the position of every point of the stytem. Position and
+		orientation. Also called a \textbf{pose}.
+	\begin{itemize}
+		\item For use: $(x, y, z)$
+	\end{itemize}
+	\item \textbf{Configuration space}: space of all possible configurations (can be thought of as one of the robot's
+		frame of references, i.e. we can change the workspace and consider the robot as e.g. a point)
+	\item \textbf{Workspace}: the 2D or 3D \textbf{ambient} space the robot is in
+\end{itemize}
+
+\section{Kinematics}%
+\noindent
+Robot knows how movement relative to centre of rotation (P). This is \textbf{not} the same as knowing how to robot moves
+in the real world.
+
+\hfill \\
+\noindent
+Two frames we need to worry about:
+\begin{itemize}
+	\item Initial frame: the world
+	\item Robot frame: think of yourself as the robot
+\end{itemize}
+
+\hfill \\
+\noindent
+Robot is at initial frame $\xi_{i} = (x_{i}, y_{i}, \theta_{i})$. We want to get to some location, but we can't control $(x_i,
+y_{i}, \theta_{i})$ directly.
+
+\hfill \\
+\noindent
+The robot can know the speed of wheel $i$: $\dot \phi_{i}$, steering angle of steerable wheel $i$: $\beta_{i}$, and
+speed with which steering angle for wheel $i$ is changing: $\dot \beta_{i}$.
+
+\hfill \\
+\noindent
+In the robot frame, we have $\xi_{r} = (x_{r}, y_{r}, \theta_{r})$. Since in the robot frame $\theta_{r} = 0$, we simply
+define $\theta_{r} = \theta_{i}$. We have: \[
+	f(\dot \phi_{i}, \dot \phi_{r}) = [\dot x_{i} \quad \dot y_{i} \quad \dot \theta_{i} ]^{\top}
+.\]
+
+\hfill \\
+\noindent
+What we want to do now is:
+\begin{equation}
+	\begin{pmatrix} \dot x_{r} \\ \dot y_{r} \\ \dot \theta_{r} \end{pmatrix} =
+	\bm{R}_{\theta} \begin{pmatrix} \dot x_{i} \\ \dot y_{i} \\ \dot \theta_{i} \end{pmatrix} \qquad
+	\text{where }
+	\bm{R}_{\theta} = \begin{pmatrix} \cos(\theta) & \sin(\theta) & 0 \\ - \sin(\theta) & \cos(\theta) & 0 \\ 0 & 0 & 1 \end{pmatrix}
+\end{equation}
+where $\theta = \theta_{i} = \theta_{r}$
+
+\hfill \\
+\noindent
+Still, this isn't what we want, we want the reverse of the (inverse-kinematics):
+\begin{equation}
+	\begin{pmatrix} \dot x_{i} \\ \dot y_{i} \\ \dot \theta_{i} \end{pmatrix} =
+	\bm{R}_{\theta}^{-1} \begin{pmatrix} \dot x_{r} \\ \dot y_{r} \\ \dot \theta_{r} \end{pmatrix} \qquad
+	\text{where }
+	\bm{R}_{\theta}^{-1} = \begin{pmatrix} \cos(\theta) & \sin(\theta) & 0 \\ - \sin(\theta) & \cos(\theta) & 0 \\ 0 & 0 & 1 \end{pmatrix}
+\end{equation}
+this tells us how to change the robot's wheels to get somewhere in the world. In our case, $\dot y_{r} = 0$ always.
+
+\hfill \\
+\noindent
+Constraints and assumptions:
+\begin{itemize}
+	\item Movement on a horizontal plane
+	\item Point contact of wheels
+	\item Wheels are not deformable
+	\item Pure rolling: velocity is 0 at contact point
+	\item ...
+\end{itemize}
+
+\hfill \\
+\noindent
+Differential Drive:
+\begin{itemize}
+	\item The \textbf{differential drive} is a two-wheeled drive system with independent actuators for each wheel. The name
+		refers to the fact that the motion vector of the robot is the sum of the independent wheel motions, and so
+		turning can be accomplished by rotating the wheels at different speeds. The drive
+		wheels are usually placed on each side of the robot and toward the front.
+	\item Wheels rotate at $\dot \phi$
+	\item Each wheel contributes $\frac{r \dot \phi}{2}$ to the motion of centre of rotation.
+	\item Speed: sum of two wheels
+	\item Rotation: due to the right wheel is $\omega_{r} = \frac{r \dot \phi}{2 l}$ counterclockwise about left wheel,
+		where $l$ is the distance between the wheel and centre of rotation.
+	\item Combining components
+	\begin{equation}
+		\begin{pmatrix} \dot x_{r} \\ \dot y_{r} \\ \dot \theta_{r} \end{pmatrix}  = \begin{pmatrix} \frac{r \dot
+	\phi_{r}}{2} + \frac{r \dot \phi_{l}}{2} \\ 0 \\ \ldots \frac{r\dot \phi_{r}}{2l} - \text{what is this? get from notes} \end{pmatrix}
+	\end{equation}
+\end{itemize}
+now, what is the change in the initial frame of reference?
+
+
+\hfill
+
+\hfill \textbf{Tue 17 Jan 2023} \\
+
+\noindent
+Kinematics works in a perfect world, with all our above assumptions satisfied, and where the robot is a point mass. In
+this case, opened-loop controllers like kinematics work.
+
+\hfill \\
+
+\noindent
+Sliding constraint:
+\begin{itemize}
+	\item Standard wheel has no lateral motion, we can have steered standard wheels or steered caster wheels
+	\item Move in circle whose centre is on \textit{zero motion line} through the axis
+\end{itemize}
+
+\hfill
+
+\noindent
+\textbf{Degree of Mobility}: number of degrees of freedom of robot chassis that can be immediately manipulated through
+changes in wheel velocity.
+
+\hfill
+
+\noindent
+\textbf{Degree of Maneuverability}: the overall degrees of freedom that a robot can manipulate: $\delta_{M} = \delta_{m}
++ \delta_{s}$
+
+\hfill
+
+\noindent
+We may want a robot to be \textbf{redundant} if it needs to get to a certain point. If one path is blocked, it can take
+another path e.g. Think of a manipulator attempting to get its end effector to a certain position. If one trajectory is
+blocked, it can make another.
+
+\section{Manipulators}%
+
+A \textbf{manipulator} is some robot that manipulates (physically alters) something in the real world, but not its own
+position, at least as a primary goal. Desirable in dangerous, dirty, or dull workspaces.
+
+\hfill
+
+\noindent
+
+
+
+\end{document}
