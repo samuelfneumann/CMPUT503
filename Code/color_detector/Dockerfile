@@ -5,8 +5,6 @@ WORKDIR /color_detector_dir
 COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
-# RUN cat requirements-apt.txt | xargs sudo apt install -y
-RUN apt list --installed
 ENV "N_SPLITS" 1
 ENV "BINS" 10
 ENV "MAX" 5
