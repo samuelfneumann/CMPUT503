@@ -144,7 +144,6 @@ def convert_to_range(hist):
     )
 
 
-# im should be a BGR image
 def print_img_data(bgr_im, step):
     hsv_im = cv2.cvtColor(bgr_im, cv2.COLOR_BGR2HSV)
     data = []
@@ -287,9 +286,6 @@ while(True):
 
     w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-    # Good! I figured it out how to get the image, now the issue is that the
-    # histogram is basically 100% for everything...
 
     # Referenced the following to figure out image decoding:
     # https://github.com/duckietown/sim-duckiebot-lanefollowing-demo
