@@ -153,7 +153,6 @@ def convert_to_range(hist):
 
 # im should be a BGR image
 def print_img_data(bgr_im, step):
-    print("======" * 20)
     hsv_im = cv2.cvtColor(bgr_im, cv2.COLOR_BGR2HSV)
     data = []
     for j in range(0, N_SPLITS):
@@ -222,6 +221,7 @@ def print_img_data(bgr_im, step):
                      rgb_stats, hsv_stats, colour_name))
 
     os.system('cls' if os.name == 'nt' else 'clear')
+    print("======" * 20)
     for j in range(0, N_SPLITS):
         r_lines, g_lines, b_lines, h_lines, s_lines, v_lines, \
             rgb_stats, hsv_stats, colour_name = data[j]
