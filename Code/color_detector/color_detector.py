@@ -17,13 +17,6 @@ if MAX < 5:
     raise ValueError("MAX should be > 5")
 
 
-# This function was adapted from:
-# https://medium.com/codex/rgb-to-color-names-in-python-the-robust-way-ec4a9d97a01f
-def convert_rgb_to_names(rgb_tuple):
-    _, index = KDT_DB.query(rgb_tuple)
-    return NAMES[index]
-
-
 def format_title(title):
     if title == "Red":
         return "\x1b[1;31m"
