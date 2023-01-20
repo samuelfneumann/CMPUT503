@@ -301,7 +301,6 @@ while(True):
             raise ValueError("N_SPLITS should be <= image height but got " +
                              f"N_SPLITS={N_SPLITS} and image shape {shape}")
 
-    # If reading was not successful
     print_img_data(bgr_frame, step)
 
     sleep(1)
