@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy.stats as st
 import os
 from time import sleep
-import pickle
-import rospy
-from sensor_msgs.msg import CompressedImage, Image
 import sys
 
 N_SPLITS = int(os.environ["N_SPLITS"])
