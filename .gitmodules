@@ -1,3 +1,6 @@
 [submodule "Code/duckie-template"]
 	path = Code/duckie-template
 	url = git@github.com:samuelfneumann/duckie-template.git
+[submodule "Code/duckie-library"]
+	path = Code/duckie-library
+	url = git@github.com:samuelfneumann/duckie-library.git
