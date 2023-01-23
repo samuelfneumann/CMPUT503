@@ -1,7 +1,11 @@
 \documentclass[13pt]{article}
 
+\input{definitions.tex}
+
 \usepackage{amsmath}
 \usepackage{bm}
+\usepackage{graphicx}
+\usepackage{wrapfig}
 
 \title{CMPUT503: Experimental Mobile Robotics}
 \author{Samuel Neumann}
@@ -50,92 +54,123 @@ Look into DuckieTown before the first lab.
 \subsection{Architectures}%
 \noindent
 \begin{itemize}
-	\item Reactive Architecture
+	\item \textbf{Reactive Architecture}
 	\begin{itemize}
 		\item \textit{Actions} are directly triggered by \textit{sensors}.
 		\item No representations of the environment
 		\item Predefined, fixed response to situation
 		\item \textit{Fast} response to changes in the environment
-		\item Limitations: no memory (unable to count), low computing power, no machine learning, knowledge of the world
-			is limited by the range of its sensors, cannot \textit{undo} and incorrect action, not possible to plan
-			ahead, unable to recover from actions which fail silently, etc.
+		\item Limitations:
+		\begin{itemize}
+			\item No memory (unable to count)
+			\item Low computing power
+			\item No machine learning
+			\item Knowledge of the world limited by the range of its sensors
+			\item Cannot \textit{undo} an incorrect action
+			\item Impossible to plan ahead
+			\item Unable to recover from actions which fail silently
+		\end{itemize}
 	\end{itemize}
-	\item Deliberative Architecture
+	\item \textbf{Deliberative Architecture}
 	\begin{itemize}
 		\item Organized by decomposing the required system functionality into \textit{concurrent modules} or components
-		\item Problems: overall complexity of the system may grow, hard to offer real-time guarantees on performance
+		\begin{itemize}
+			\item Map building
+			\item Path planning
+			\item Navigation
+			\item ...
+		\end{itemize}
+		\item Problems: overall complexity of the system grows with required components, hard to offer real-time
+		guarantees on performance:
 		\begin{itemize}
 			\item Solving any given problem takes longer than an equivalent \textit{reactive} implementation
 			\item Solving different problems take different amount of time
 		\end{itemize}
+		\item One kind of decomposition is \textbf{temporal decomposition} (see below)
 	\end{itemize}
-	\item Subsumption Architecture
-	\item ROS?
-\end{itemize}
-
-\noindent
-\textit{Temporal Decomposition} distinguishes between processes that have varying real-time and non-real-time demands
-
-\noindent
-\textbf{If you fail to meet a hard real-time requirement, then your system is broken.} E.g.: driving off a cliff.
-
-\textbf{Rodney A. Brooks}: tried to make a realistic robot with the abilities of an insect. He developed the \textit{subsumption
+	\item \textbf{Subsumption Architecture}
+	\begin{itemize}
+		\item Formed using a collection of concurrent behaviours placed in layers
+		\item The higher-level behaviours always, if triggered, subsume the output of lower behaviours and therefore
+		have \textbf{overall control}.
+		\item Problem: hard to have many layers as goals begin interfering with each other
+		\item \textbf{Rodney A. Brooks}: tried to make a realistic robot with the abilities of an insect. He developed the \textit{subsumption
 architecture}. This architecture puts different importance/prioritization on different tasks. E.g. I really don't want
 to fall off the cliff, but if I'm not falling off a cliff, then don't bump into any objects, etc.
+	\end{itemize}
+	\item \textbf{ROS}
+	\begin{itemize}
+		\item A \textit{meta} operating system for robots
+		\item An \textbf{architecture} for distribution inter-process/inter-machine communication and configuration
+		\item ROS is a \textit{peer-to-peer} robot middleware package
+		\item In ROS, all major functionality is broken into nodes that communicate with each other using messages sent
+			on topics. Each node is typically run as a \textit{separate process}.
+		\item \textbf{Not} a programming language
+		\item \textbf{Not} a \textit{hard real-time} architecture
+		\item ...
+	\end{itemize}
+\end{itemize}
+
+\begin{defn}{Temporal Decomposition}
+	A way to decompose a system's required functionality which distinguishes between process that have varying real-time
+	and non-real-time demands.
+\end{defn}
+
+\begin{defn}{Hard Real-Time Requirement}
+	A real-time requirement where, if not met, results in system failure or the system being broken (e.g. driving off a
+	cliff).
+\end{defn}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.35\linewidth]{figures/temporal_decomp}
+	\end{center}
+	\caption{Types of time demands for \textit{temporal decomposition}.}
+	\label{fig:temporal_decomp}
+\end{figure}
 
 \subsection{What is ROS?}%
-\noindent
-\begin{itemize}
-	\item A \textit{meta} operating system for robots
-	\item An \textbf{architecture} for distribution inter-process/inter-machine communication and configuration
-	\item ROS isa \textit{peer-to-peer} robot middleware package
-	\item In ROS, all major functionality is broken into nodes that communicate with each other using messages sent
-		on topics
-	\item \textbf{Not} a programming language
-	\item \textbf{Not} a \textit{hard real-time} architecture
-	\item ...
-\end{itemize}
 
 \subsubsection{ROS Nodes}%
-\noindent
-\begin{itemize}
-	\item \textbf{Node}: a process that performs some computation
-	\item Typically we try to divide the entire software into different modules -- eac hon ei srun onver a single or
-		multiple nodes.
-	\item  Nodes are combined together into graph and communicated with each other using streaming topics. Nodes
-		\textbf{do not} communicate with each other directly, otherwise we get into the craziness and complicationes of
-		the other architectures.
-\end{itemize}
+
+Typically, we try to divide software into different modules, each of which performs a specific task. In ROS, these
+modules are run over a single or multiple \textit{Nodes}.
+
+\begin{defn}{Node}
+	a process that performs some computation.
+\end{defn}
+
+Nodes are combined together into a graph and communicat with each other using streaming \textit{topics}. Nodes
+\textbf{do not} communicate with each other directly, otherwise we can get into the craziness and complications of the
+other architectures discussed above.
 
 \subsubsection{ROS Topics}%
-\noindent
+
+\begin{defn}{Topic}
+	a named bus over which nodes exchange messages
+\end{defn}
+
 \begin{itemize}
-	\item \textbf{Topic}: named buses over which nodes exchange messages to ROS master
-	\item Topics have \textbf{anonymous} publish/subscribe semantics
+	\item Topics have \textbf{anonymous} publish/subscribe semantics, i.e. no one knows who published a message or read
+	a message
 	\item Can be \textit{multiple} publisher and subscribers to a topic
 	\item Strongly typed
 \end{itemize}
 
 \subsubsection{ROS Messages}%
-\noindent
-\begin{itemize}
-	\item \textbf{Message}: is a simple data structure, comprising typed fields.
-	\item Can contain headers with metadata
-\end{itemize}
+\begin{defn}{Message}
+	a simple data structure comprising strongly typed fields which is used for one node to communicate to other nodes
+\end{defn}
 
 \section{Locomotion}%
-\noindent
-\textbf{Locomotion}: enabling robots to move
+\begin{defn}{Locomotion}
+	enabling a robot to move
+\end{defn}
 
-\hfill
-
-\noindent
-Wheel locomotion is simple, safer, and stable:
-
-\hfill
+\hfill\\
 
 \noindent
-\textbf{Key issues for wheeled locomotion}:
+Wheeled locomotion is simple, safe, and stable. Key issues for wheeled locomotion include
 \begin{itemize}
 	\item Stability
 	\begin{itemize}
@@ -268,7 +303,11 @@ Stability is improved by 4 and more wheels
 
 \hfill \\
 \noindent
-\textbf{Holonomic}: can move in any direction
+\begin{defn}{Holonomic}
+	refers to the relationship between controllable and total degrees of freedom of a robot. If the controllable degrees
+	of freedom is equal to the total degrees of freedom, then the robot is said to be \textbf{holonomic}. If a robot is
+	holonomic, it can move in any direction in its configuraiton space.
+\end{defn}
 
 \hfill \\
 \noindent
@@ -299,7 +338,7 @@ given motor inputs.
 
 \hfill \\
 \noindent
-\textbf{Mobile robots} can move unbounded with respect to their enviornment:
+\textbf{Mobile robots} can move unbounded with respect to their environment:
 \begin{itemize}
 	\item No direct way to measure robot's position
 	\item Position must be integrated over time
@@ -308,69 +347,108 @@ given motor inputs.
 
 \hfill \\
 \noindent
-Some important definitions:
-\begin{itemize}
-	\item \textbf{Configuration}: complete specification of the position of every point of the stytem. Position and
-		orientation. Also called a \textbf{pose}.
-	\begin{itemize}
-		\item For use: $(x, y, z)$
-	\end{itemize}
-	\item \textbf{Configuration space}: space of all possible configurations (can be thought of as one of the robot's
-		frame of references, i.e. we can change the workspace and consider the robot as e.g. a point)
-	\item \textbf{Workspace}: the 2D or 3D \textbf{ambient} space the robot is in
-\end{itemize}
+\begin{defn}{Configuration}
+	a complete specification of the position of every point of the robotic system (position and orientation). This is
+	sometimes also called a \textbf{pose}.
+\end{defn}
+
+\begin{defn}{Configuration Space}
+	The space of all possible configurations, which can be thought of as one of the robot's frame of references.
+\end{defn}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figures/cspace}
+	\caption{(a)A circular mobile in the workspace. The configuration space is the set of all points in space that the
+	robot can be in. By re-representing the circular robot as a point, we can (b) adjust the workspace to result in the
+	same configuration space and (c) consider the robot as a single point which simplifies calculations.}
+	\label{fig:config_space}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figures/cspace2}
+\end{figure}
+
+\begin{defn}{Workspace}
+	the 2D or 3D \textbf{ambient} space the robot is in
+\end{defn}
 
 \section{Kinematics}%
-\noindent
-Robot knows how movement relative to centre of rotation (P). This is \textbf{not} the same as knowing how to robot moves
-in the real world.
+\begin{defn}{Kinematics}
+	computing how a robot will move given motor inputs
+\end{defn}
+
+\begin{defn}{Inverse Kinematics}
+	computing how to move motors to get a robot to do what we want
+\end{defn}
 
 \hfill \\
 \noindent
-Two frames we need to worry about:
+There are two frames that we need to worry about:
 \begin{itemize}
-	\item Initial frame: the world
-	\item Robot frame: think of yourself as the robot
+	\item \textbf{Initial frame}: the world - $\xi_{i} = (x_{i}, y_{i}, \theta_{i})$
+	\item \textbf{Robot frame}: think of yourself as the robot - $\xi_{r} = (x_{r}, y_{r}, \theta_{r})$
 \end{itemize}
 
 \hfill \\
 \noindent
 Robot is at initial frame $\xi_{i} = (x_{i}, y_{i}, \theta_{i})$. We want to get to some location, but we can't control $(x_i,
-y_{i}, \theta_{i})$ directly.
+y_{i}, \theta_{i})$ directly. Instead, the robot can only control $\xi_{r}$.
+
+\hfill \\ \noindent Consider a wheeled robot where the robot can know the speed of wheel $i$: $\dot \phi_{i} \forall i =
+1, \ldots, n$, steering angle of steerable wheel $j$: $\beta_{j} \forall j = 1, \ldots, m$, and speed with which
+steering angle for wheel $j$ is changing: $\dot \beta_{j}$. These define the forward motion of the robot or the
+\textit{forward kinematics}.
 
 \hfill \\
 \noindent
-The robot can know the speed of wheel $i$: $\dot \phi_{i}$, steering angle of steerable wheel $i$: $\beta_{i}$, and
-speed with which steering angle for wheel $i$ is changing: $\dot \beta_{i}$.
-
-\hfill \\
-\noindent
-In the robot frame, we have $\xi_{r} = (x_{r}, y_{r}, \theta_{r})$. Since in the robot frame $\theta_{r} = 0$, we simply
-define $\theta_{r} = \theta_{i}$. We have: \[
-	f(\dot \phi_{i}, \dot \phi_{r}) = [\dot x_{i} \quad \dot y_{i} \quad \dot \theta_{i} ]^{\top}
+In the robot frame, we have $\xi_{r} = (x_{r}, y_{r}, \theta_{r})$. But, since a wheeled robot is always facing straight
+forward, we have $\theta_{r} = 0$. We will simply re-define $\theta_{r} = \theta_{i}$. We have the forward kinematics
+to be: \[
+	f(\dot \phi_{i}, \ldots, \dot \phi_{n}, \beta_{1}, \ldots, \beta_{m}, \dot \beta_{1}, \ldots, \dot \beta_{m}) =
+	[\dot x_{i} \quad \dot y_{i} \quad \dot \theta_{i} ]^{\top}
+.\]
+Inverse kinematics would give us: \[
+	[\dot \phi_{i} \ \ldots \ \dot \phi_{n} \ \beta_{1} \ \ldots \ \beta_{m} \ \dot \beta_{1} \ \ldots \ \dot \beta_{m}]^{\top} =
+	f^{-1}(\dot x_{i}, \dot y_{i}, \dot \theta_{i})
 .\]
 
 \hfill \\
 \noindent
 What we want to do now is:
 \begin{equation}
-	\begin{pmatrix} \dot x_{r} \\ \dot y_{r} \\ \dot \theta_{r} \end{pmatrix} =
-	\bm{R}_{\theta} \begin{pmatrix} \dot x_{i} \\ \dot y_{i} \\ \dot \theta_{i} \end{pmatrix} \qquad
-	\text{where }
+	\dot \xi_{r} = \begin{pmatrix} \dot x_{r} \\ \dot y_{r} \\ \dot \theta_{r} \end{pmatrix} =
+	\bm{R}_{\theta} \begin{pmatrix} \dot x_{i} \\ \dot y_{i} \\ \dot \theta_{i} \end{pmatrix} = \bm{R}_{\theta} \dot
+	\xi_{i}\qquad \text{where }
 	\bm{R}_{\theta} = \begin{pmatrix} \cos(\theta) & \sin(\theta) & 0 \\ - \sin(\theta) & \cos(\theta) & 0 \\ 0 & 0 & 1 \end{pmatrix}
 \end{equation}
-where $\theta = \theta_{i} = \theta_{r}$
+where $\theta = \theta_{i} = \theta_{r}$. We get
+\begin{align}
+	\dot x_{r} &= \dot x_{i} \cos(\theta) + \dot y_{i} \sin(\theta) \\
+	\dot y_{r} &= - \dot x_{i} \sin(\theta) + \dot y_{i} \cos(\theta) \\
+	\dot \theta_{r} &= \dot \theta_{i}
+\end{align}
 
 \hfill \\
 \noindent
-Still, this isn't what we want, we want the reverse of the (inverse-kinematics):
+Still, this isn't what we want, we want the inverse-kinematics, not the kinematics:
 \begin{equation}
 	\begin{pmatrix} \dot x_{i} \\ \dot y_{i} \\ \dot \theta_{i} \end{pmatrix} =
 	\bm{R}_{\theta}^{-1} \begin{pmatrix} \dot x_{r} \\ \dot y_{r} \\ \dot \theta_{r} \end{pmatrix} \qquad
 	\text{where }
-	\bm{R}_{\theta}^{-1} = \begin{pmatrix} \cos(\theta) & \sin(\theta) & 0 \\ - \sin(\theta) & \cos(\theta) & 0 \\ 0 & 0 & 1 \end{pmatrix}
+	\bm{R}_{\theta}^{-1} = \begin{pmatrix} \cos(\theta) & -\sin(\theta) & 0 \\ \sin(\theta) & \cos(\theta) & 0 \\ 0 & 0 & 1 \end{pmatrix}
 \end{equation}
-this tells us how to change the robot's wheels to get somewhere in the world. In our case, $\dot y_{r} = 0$ always.
+this tells us how to change the robot's wheels to get somewhere in the world. In our case, $\dot y_{r} = 0$ always:
+\begin{align}
+	\dot x_{i} &= \dot x_{r} \cos(\theta) - \dot y_{r} \sin(\theta) \\
+	\dot y_{i} &= \dot x_{r} \sin(\theta) + \dot y_{r} \cos(\theta) \\
+	\dot \theta_{i} &=  \dot \theta_{r}
+\end{align}
+
+\hfill \\ \noindent So, if we know the relative changes in $x$, $y$, and $\theta$, we can find the global position. How
+do we know what these values are?
+
 
 \hfill \\
 \noindent
@@ -399,7 +477,7 @@ Differential Drive:
 	\item Combining components
 	\begin{equation}
 		\begin{pmatrix} \dot x_{r} \\ \dot y_{r} \\ \dot \theta_{r} \end{pmatrix}  = \begin{pmatrix} \frac{r \dot
-	\phi_{r}}{2} + \frac{r \dot \phi_{l}}{2} \\ 0 \\ \ldots \frac{r\dot \phi_{r}}{2l} - \text{what is this? get from notes} \end{pmatrix}
+	\phi_{r}}{2} + \frac{r \dot \phi_{l}}{2} \\ 0 \\ \frac{r\dot \phi_{r}}{2l} - \frac{r\dot \phi_{l}}{2l} \end{pmatrix}
 	\end{equation}
 \end{itemize}
 now, what is the change in the initial frame of reference?
@@ -448,8 +526,19 @@ position, at least as a primary goal. Desirable in dangerous, dirty, or dull wor
 
 \hfill
 
-\noindent
+\hfill \textbf{Thu 19 Jan 2023}
 
+\hfill
+
+\noindent
+\textbf{Actuator}: generates motion or force, usually a motor
+
+\hfill \\
+\noindent
+For wheels on a robot, we want them synchronized so we typically want to use a servo motor and not a DC motor.
+
+\hfill \\
+\noindent
 
 
 \end{document}

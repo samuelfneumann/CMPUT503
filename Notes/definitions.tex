@@ -1,0 +1,333 @@
+\RequirePackage{latexsym}
+\RequirePackage{amsmath}
+\RequirePackage[many]{tcolorbox}
+\RequirePackage{amssymb}
+\RequirePackage{bm}
+\RequirePackage{dsfont}
+\RequirePackage{enumitem}
+
+
+%%%%%%%% Distribution definitions %%%%%%%%%%%%%%%
+
+\newcommand{\normal}{\mathcal{N}}
+\newcommand{\given}{|}
+
+%%%%%%%% Matrix/vector definitions %%%%%%%%%%%%%%%
+
+\newcommand{\inlinevec}[2]{%
+  \ensuremath{\Bigl[\negthinspace\begin{smallmatrix}#1\\#2\end{smallmatrix}\Bigr]}}
+\newcommand{\inlinemat}[4]{%
+  \ensuremath{\Bigl[\negthinspace\begin{smallmatrix}#1 \ \ #2 \\#3 \ \ #4\\\end{smallmatrix}\Bigr]}}
+\newcommand{\mathvec}[2]{\left[\begin{array}{c}#1\\#2\end{array} \right] }
+
+\renewcommand{\vec}[1]{\mathbf{\boldsymbol{#1}}}
+%\newcommand{\makevector}[1]{{\mathbf #1}}
+\newcommand{\zerovec}{\vec{0}}
+\newcommand{\onevec}{\vec{1}}
+\newcommand{\one}{\mathbf{1}}  % Identity
+\newcommand{\zero}{\mathbf{0}} % Zero
+\newcommand{\eye}{\mathbf{I}}
+\newcommand{\idfcn}{\mathds{1}}
+
+%%%%%%%% Simple math functions %%%%%%%%%%%%%%%
+\newcommand{\transpose}{{\raisebox{.2ex}{$\scriptscriptstyle\top$}}}
+\newcommand{\inv}{{\raisebox{.2ex}{$\scriptscriptstyle-1$}}}
+\newcommand{\invt}{{\raisebox{.2ex}{$\scriptscriptstyle-\top$}}}
+\newcommand{\pinv}{{\raisebox{.2ex}{$\scriptscriptstyle+$}}}
+\newcommand{\pinvt}{{\raisebox{.2ex}{$\scriptscriptstyle+\top$}}}
+\newcommand{\sgrad}{\partial}
+\newcommand{\sign}[1]{\mathrm{sign}(#1)}
+\newcommand{\posdef}{\succeq}
+\newcommand{\e}{{\textrm{e-}}}
+\newcommand{\Dom}{{\textrm{Dom}}}
+\newcommand{\smallinv}[1]{{#1}^{\scalebox{0.5}[0.5]{\( - 1\)}}}
+
+%%%%%%%% Norm definitions %%%%%%%%%%%%%%%
+\newcommand{\frob}[1]{\left\| #1 \right\|_F}
+\newcommand{\frobsq}[1]{\left\| #1 \right\|_F^2}
+\newcommand{\frobsqtr}[1]{\text{tr}\left(#1'#1\right)}
+\newcommand{\sqnorm}[1]{\left\|  #1 \right\|_{2}}
+\newcommand{\spnorm}[1]{\left\|  #1 \right\|_{sp}}
+\newcommand{\tracenorm}[1]{\left\|  #1 \right\|_{tr}}
+\newcommand{\twonorm}[1]{\left\|  #1 \right\|_2}
+\newcommand{\twoone}[1]{\left\|  #1 \right\|_{2,1}}
+\newcommand{\bregman}[3]{D_{#1}(#2 \; || \: #3)}
+
+%%%%%%%% Widely accepted Sets and Symbols %%%%%%%%%%%%%%%
+
+\newcommand{\CC}{\mathbb{C}} % Complex numbers
+\newcommand{\EE}{\mathbb{E}} % Expectation
+\newcommand{\FF}{\mathbb{F}} % Fexpectation
+\newcommand{\HH}{\mathbb{H}} % Arbitrary field
+\newcommand{\II}{\mathbb{I}} % Delta Indicator
+\newcommand{\KK}{\mathbb{K}} % Arbitrary field
+\newcommand{\MM}{\mathbb{M}} % Median
+\newcommand{\NN}{\mathbb{N}} % Natural numbers
+\newcommand{\PP}{\mathbb{P}} % Probability
+\newcommand{\QQ}{\mathbb{Q}} % Rationals
+\newcommand{\RR}{\mathbb{R}} % RR numbers
+\newcommand{\RRbar}{\overline{\RR}} % RR numbers
+\newcommand{\VV}{\mathbb{V}} % Variance
+\newcommand{\XX}{\mathbb{X}}
+\newcommand{\YY}{\mathbb{Y}}
+\newcommand{\ZZ}{\mathbb{Z}} % Integers
+
+% Set of [0, infty]
+\newcommand{\RRpos}{{\RR^+}}
+
+%%%%%%%% Mathematical Operations %%%%%%%%%%%%%%%
+
+\newcommand*{\argmin}{\mathop{\mathrm{argmin}}}
+\newcommand*{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand*{\arginf}{\mathop{\mathrm{arginf}}}
+\newcommand*{\argsup}{\mathop{\mathrm{argsup}}}
+\newcommand{\bd}{\mathop{\mathrm{bd}}}
+\newcommand{\cl}{\mathop{\mathrm{cl}}}
+\newcommand{\core}{\mathop{\mathrm{core}}}
+\newcommand{\co}{\mathop{\mathrm{co}}}
+\newcommand{\col}{\mathop{\mathrm{col}}}
+\newcommand{\cov}{\mathrm{Cov}}
+\newcommand{\conv}{\mathrm{conv}}
+\newcommand{\const}{\mathrm{constant}}
+\newcommand{\dom}{\mathop{\mathrm{dom}}}
+\newcommand{\diag}{\mathop{\mathrm{diag}}}
+\newcommand{\eigs}{\mathop{\mathrm{eigs}}}
+\newcommand{\emp}{\mathop{\mathrm{emp}}}
+\newcommand{\intr}{\mathop{\mathrm{int}}}
+\newcommand{\nulls}{\mathop{\mathrm{null}}}
+\newcommand*{\mini}{\mathop{\mathrm{minimize}}}
+\newcommand*{\maxi}{\mathop{\mathrm{maximize}}}
+\newcommand{\nnz}{\mathop{\mathrm{nnz}}}
+\newcommand{\rank}{\mathop{\mathrm{rank}}}
+\newcommand{\ri}{\mathop{\mathrm{ri}}}
+\newcommand{\row}{\mathop{\mathrm{row}}}
+\newcommand{\sgn}{\mathop{\mathrm{sign}}}
+\newcommand{\spec}{\mathop{\mathrm{sp}}}
+\newcommand{\sspan}{{\textrm{span}}}
+\newcommand{\svd}{\mathop{\mathrm{svd}}}
+\newcommand{\te}{\mathop{\mathrm{te}}}
+\newcommand{\traj}{\mathop{\mathrm{Traj}}}
+\newcommand{\tr}{\mathop{\mathrm{tr}}}
+\newcommand{\vect}{\mathop{\mathrm{vec}}}
+\DeclareMathOperator\arctanh{arctanh}
+%\newcommand{\ln}{\mathop{\mathrm{ln}}}
+
+%%%%%%%% Utility functions %%%%%%%%%%%%%%%
+
+\newcommand{\exampleref}[1]{Example \ref{#1}}
+\newcommand{\eq}[1]{(\ref{#1})}
+\newcommand{\mymatrix}[2]{\left[\begin{array}{#1} #2 \end{array}\right]}
+\newcommand{\mychoose}[2]{\left(\begin{array}{c} #1 \\ #2 \end{array}\right)}
+\newcommand{\mydet}[1]{\det\left[ #1 \right]}
+\newcommand{\myspan}[1]{\mathrm{span}\cbr{#1}}
+\newcommand{\smallfrac}[2]{{\textstyle \frac{#1}{#2}}}
+\newcommand{\pwrt}[1]{\frac{\partial}{\partial #1}}
+\newcommand{\ppwrt}[1]{\frac{\partial^2}{(\partial #1)^2}}
+\newcommand{\aleq}{\preccurlyeq}
+\newcommand{\ageq}{\succcurlyeq}
+\newcommand{\set}[2]{\{#1 \ | \ #2\}}
+\newcommand{\subfigurespace}[1]{ % Reasonable value = 0.1
+\begin{minipage}[b]{#1\textwidth}
+ \textbf{ }
+ \end{minipage}}
+ \newcommand{\figspace}{\begin{minipage}[b]{0.1\textwidth} \textbf{ } \end{minipage}}
+\newcommand{\unaryminus}{\scalebox{0.75}[1.0]{\( - \)}}
+
+%%%%%%%% Brackets %%%%%%%%%%%%%%%
+
+\newcommand{\rbr}[1]{\left(#1\right)}
+\newcommand{\sbr}[1]{\left[#1\right]}
+\newcommand{\cbr}[1]{\left\{#1\right\}}
+\newcommand{\nbr}[1]{\left\|#1\right\|}
+\newcommand{\abr}[1]{\left|#1\right|}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\inner}[2]{\left\langle #1,#2 \right\rangle}
+\newcommand{\norm}[1]{\|#1\|}
+\newcommand{\ccc}[1]{|\!|\!|#1|\!|\!|}
+\newcommand{\sembrack}[1]{[\![#1]\!]}
+
+
+%%%%%%%% Text definitions %%%%%%%%%%%%%%%
+
+\newcommand{\apriori}{{\emph{a priori}}}
+\newcommand{\emphdef}[1]{\textbf{#1}}
+\newcommand{\introword}[1]{\textbf{\emph{#1}}}
+\newcommand{\emphstart}[1]{\textbf{#1}}
+\newcommand{\ea}{\emph{et al.}}
+\newcommand{\eg}{\emph{e.g.}}
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\iid}{\text{i.i.d.}}
+\newcommand{\cf}{\emph{cf.}\ }
+\newcommand{\wrt}{\emph{w.r.t.}\ }
+\newcommand{\subheader}[1]{
+\vspace{8pt}
+\noindent
+{\large\bfseries #1}}
+
+
+%%%%%%%% Theorems and Friends %%%%%%%%%%%%%%%
+
+%% Some style files might actually define these variables.
+%% So don't mess with them if they are already defined
+
+\ifx\BlackBox\undefined
+\newcommand{\BlackBox}{\rule{1.5ex}{1.5ex}}  % end of proof
+\fi
+
+\ifx\QED\undefined
+\def\QED{~\rule[-1pt]{5pt}{5pt}\par\medskip}
+\fi
+
+\newcommand{\eproof}{$\null\hfill\blacksquare$}
+%\ifx\proof\undefined
+\newenvironment{proof}{\par\noindent{\bf Proof:\ }}{\eproof}
+\newenvironment{proofsketch}{\par\noindent{\bf Proof Sketch:\ }}{\eproof}
+\newcounter{example}
+\newenvironment{example}{\begin{tcolorbox}[breakable,title filled=false,colframe=blue!33!black,title=\refstepcounter{example}\par\noindent{\bf Example \theexample\ }]}{\end{tcolorbox}}
+\newcounter{exercise}
+\newenvironment{exercise}{\begin{tcolorbox}[colframe=red!33!black,breakable,title filled=false,title=\refstepcounter{exercise}\par\noindent{\bf Exercise \theexercise\
+}]}{\end{tcolorbox}}
+
+\newenvironment{solution}{\begin{tcolorbox}[title=\textbf{Solution},breakable,title filled=false,colframe=green!33!black]}{\end{tcolorbox}}
+\newenvironment{note}{\begin{tcolorbox}[title=\textbf{Note},breakable,title filled=false,colframe=yellow!66!black]}{\end{tcolorbox}}
+\newenvironment{defn}[1]{\begin{tcolorbox}[title=\textbf{Definition},breakable,title
+filled=false,colframe=blue!66!black]\textbf{#1}: }{\end{tcolorbox}}
+% \newcommand{date}[1]{\begin{tcolorbox}[title=\textbf{#1},breakable,title filled=false,colframe=orange!66!black]\end{tcolorbox}}
+
+% If end proof with align, then can add a negative space to bring up proof box
+\newcommand{\palignbox}{\par \vspace{-0.8cm}}
+
+\newif\ifsamenumbers
+
+\ifx\theorem\undefined
+\newtheorem{theorem}{Theorem}
+\fi
+
+\ifx\example\undefined
+\newtheorem{example}{Example}{$\square$}
+\fi
+
+\ifx\property\undefined
+\newtheorem{property}{Property}
+\fi
+
+\ifx\lemma\undefined
+\ifsamenumbers
+\newtheorem{lemma}[theorem]{Lemma}
+\else
+\newtheorem{lemma}{Lemma}
+\fi
+\fi
+
+\ifx\proposition\undefined
+\ifsamenumbers
+\newtheorem{proposition}[theorem]{Proposition}
+\else
+\newtheorem{proposition}{Proposition}
+\fi
+\fi
+
+\ifx\remark\undefined
+\newtheorem{remark}{Remark}
+\fi
+
+\ifx\corollary\undefined
+\ifsamenumbers
+\newtheorem{corollary}[theorem]{Corollary}
+\else
+\newtheorem{corollary}{Corollary}
+\fi
+\fi
+
+\ifx\definition\undefined
+\newtheorem{definition}{Definition}
+\fi
+
+\ifx\conjecture\undefined
+\ifsamenumbers
+\newtheorem{conjecture}[theorem]{Conjecture}
+\else
+\newtheorem{conjecture}{Conjecture}
+\fi
+\fi
+
+\ifx\axiom\undefined
+\newtheorem{axiom}{Axiom}
+\fi
+
+\ifx\claim\undefined
+\ifsamenumbers
+\newtheorem{claim}[theorem]{Claim}
+\else
+\newtheorem{claim}{Claim}
+\fi
+\fi
+
+\ifx\assumption\undefined
+\newtheorem{assumption}{Assumption}
+\fi
+
+\newenvironment{cenumerate}{%
+\vspace{10pt}
+\noindent{\Large\bfseries Contributions:}
+\begin{enumerate}[label={\textbf{Contribution \arabic*.}\ },leftmargin=0cm,itemindent=.5cm,labelwidth=\itemindent,labelsep=0cm,align=left]
+}
+{\end{enumerate}}
+
+%%%%%%%% Various Optimizers %%%%%%%%%%%%%%%
+
+\newcommand{\BMRM}{{\sf BMRM}}
+\newcommand{\bmrm}{{\sf BMRM}}
+\newcommand{\cpm}{{\sf CPM}}
+\newcommand{\liblinear}{{\sf liblinear}}
+\newcommand{\lsbmrm}{{\sf ls-bmrm}}
+\newcommand{\qpbmrm}{{\sf qp-bmrm}}
+\newcommand{\pegasos}{{\sf pegasos}}
+\newcommand{\pegan}{{\sf pegasos-$n$}}
+\newcommand{\pegaone}{{\sf pegasos-1}}
+\newcommand{\svmstruct}{{\sf SVM-Struct}}
+\newcommand{\svmperf}{{\sf SVM-Perf}}
+\newcommand{\nest}{{\sf pragam}}
+\newcommand{\nestb}{{\sf pragam-b}}
+\newcommand{\mcn}{{\sf M$^3$N}}
+\newcommand{\expgrad}{{\sf ExpGrad}}
+\newcommand{\smo}{{\sf SMO}}
+\newcommand{\lasvm}{{\sf LaSVM}}
+\newcommand{\sms}{{\sf SMS}}
+
+
+\newcommand{\prbep}{{\sf PRBEP}}
+\newcommand{\rocarea}{{\sf ROCArea}}
+\newcommand{\pca}{\text{\sc pca}}
+
+\newcommand{\arow}[2]{#1_{#2\cdot}}
+\newcommand{\acol}[2]{#1_{\cdot#2}}
+\newcommand{\expunder}[1]{\mathop{\EE}\limits_{#1}}
+\newcommand{\mean}[1]{\mathop{\EE}\sbr{{#1}}}
+\newcommand{\vars}[2]{\var_{{#1}}\sbr{{#2}}}
+\newcommand{\expec}[2]{\mathop{\EE}_{{#1}}\sbr{{#2}}}
+
+\newcommand{\twoco}[1]{\multicolumn{2}{c|}{#1}}
+\def\ci{\perp\!\!\!\perp}
+
+\newcommand{\gstar}{g^{\star}}
+\newcommand{\fstar}{f^{\star}}
+\newcommand{\hstar}{h^{\star}}
+\newcommand{\Astar}{A^{\star}}
+\newcommand{\Kstar}{K^{\star}}
+
+\newcommand{\var}{\mathrm{V}}
+\newcommand{\grad}{{\nabla}}
+\newcommand{\gradtil}{{\tilde{\grad}}}
+\newcommand{\MED}{{\text{MED}}}
+\newcommand{\where}{{\quad \text{where} \quad}}
+\newcommand{\lcg}{{\textit{l.c.g}}}
+\newcommand{\cp}{\mathrm{cp}}
+\newcommand{\err}{{\sf err}}
+
+\newcommand{\ydiff}[2]{\delta(#1, #2)}
+\newcommand{\ykdiff}[2]{\delta(#1, #2)^{\kappa}}
+\newcommand{\myfdiff}[2]{\Delta f(#1, #2)}
+
