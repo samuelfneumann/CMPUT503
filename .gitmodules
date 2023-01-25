@@ -4,3 +4,9 @@
 [submodule "Code/duckie-library"]
 	path = Code/duckie-library
 	url = git@github.com:samuelfneumann/duckie-library.git
+[submodule "Code/Lab2/duckie-template-ros"]
+	path = Code/Lab2/duckie-template-ros
+	url = git@github.com:samuelfneumann/duckie-template-ros.git
+[submodule "Code/Lab2/CMPUT503_Lab2"]
+	path = Code/Lab2/CMPUT503_Lab2
+	url = git@github.com:samuelfneumann/CMPUT503_Lab2.git
