@@ -373,8 +373,10 @@ class EncoderPoseNode(DTROS):
             _State.STATE4a, _State.STATE4b, _State.STATE4c, _State.STATE4d
         ):
             self._do_state4()
+        elif self._state == _State.STOP:
+            pass
         else:
-            rospy.logerror(f"unknown state {self._state}")
+            rospy.logwarn(f"unknown state {self._state}")
             pass
 
     def _do_state2(self):
