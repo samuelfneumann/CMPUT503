@@ -1,0 +1,12 @@
+<package>
+  <name>lab2</name>
+  <version>0.1.0</version>
+  <description>
+		  CMPUT503 Lab 2
+  </description>
+  <maintainer email="sfneuman@ualberta.ca">Samuel Neumann</maintainer>
+  <license>None</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>
+

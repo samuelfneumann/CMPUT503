@@ -1,0 +1,13 @@
+<launch>
+
+  <group ns="$(arg veh)">
+
+    <node pkg="lab2" type="camera_subscriber.py" name="camera_subscriber_node"  output="screen">
+        <remap from="camera_topic" to="/$(arg veh)/camera_node/image/compressed"/>
+    </node>
+
+	<node pkg="lab2" type="odometry_node.py" name="odometry_node" output="screen"/>
+
+   </group>
+
+</launch>

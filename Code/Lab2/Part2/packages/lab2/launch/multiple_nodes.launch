@@ -1,0 +1,10 @@
+<launch>
+
+  <group ns="$(arg veh)">
+
+	<node pkg="lab2" type="light_service_node.py" name="light_service_node" output="screen"/>
+	<node pkg="lab2" type="encoder_pose_node.py" name="encoder_pose_node" output="screen"/>
+
+   </group>
+
+</launch>
