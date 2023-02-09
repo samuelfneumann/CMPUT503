@@ -1,0 +1,170 @@
+
+\documentclass{article} % For LaTeX2e
+\usepackage{style/iclr2023_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{style/math_commands.tex}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{wrapfig}
+
+\usepackage{xcolor}
+\newcommand{\TODO}[1]{{\color{red} #1}}
+
+\usepackage[]{svg}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage[scr=boondoxo,cal=dutchcal,bb=boondox,frak=euler]{mathalpha}
+
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\graphicspath{{figures/}}
+\usepackage{booktabs} % for professional tables
+\usepackage{transparent} % For pdf_tex files
+
+
+% For theorems and such
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+\usepackage[capitalize,noabbrev]{cleveref}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Misc Packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{verbatim}
+\usepackage{sidecap}
+\usepackage{enumitem}
+\usepackage[mathscr]{euscript}
+\usepackage{blindtext}
+
+\usepackage{multicol}
+\usepackage{wrapfig}
+\usepackage{pbox}
+
+% Custom commands
+\newcommand{\CEM}{CEM}
+\newcommand{\CCEM}{CCEM}
+\newcommand{\BQ}{\ensuremath{%
+	\mathcal{B}_\tau Q(s,a)}%
+}
+\newcommand{\eproof}{$\null\hfill\blacksquare$}
+\newenvironment{proofsketch}{\par\noindent{\bf Proof Sketch:\ }}{\eproof}
+
+\newtheorem{defn}{Definition}
+\newtheorem{assm}{Assumption}
+\newtheorem{lem}{Lemma}
+\def\bbbr{{\rm I\!R}}
+\newcommand{\yvec}{\mathbf{y}}
+\newcommand\mysim{\stackrel{\mathclap{\tiny\mbox{iid}}}{\sim}}
+\newenvironment{proofref}[1]{\par\noindent{\bf #1:\ }}{\eproof} %{\hfill\BlackBox\\[.3mm]}
+
+% Vectors
+\newcommand{\avec}{\mathbf{a}}
+\newcommand{\hvec}{\mathbf{h}}
+\newcommand{\wvec}{\mathbf{w}}
+\newcommand{\uvec}{\mathbf{u}}
+\newcommand{\xvec}{\mathbf{x}}
+\newcommand{\svec}{\mathbf{s}}
+\newcommand{\zvec}{\mathbf{z}}
+\newcommand{\kvec}{\mathbf{k}}
+\newcommand{\zerovec}{\mathbf{0}}
+\newcommand{\thetavec}{\mathbf{\theta}}
+\newcommand{\obsfunc}{\mathbf{o}}
+\newcommand{\epsilonvec}{{\boldsymbol{\epsilon}}}
+\newcommand{\muvec}{{\boldsymbol{\mu}}}
+\newcommand{\phivec}{{\boldsymbol{\phi}}}
+\newcommand{\betavec}{{\boldsymbol{\beta}}}
+
+% Scalars
+\newcommand{\nprototypes}{b}
+\newcommand{\ldim}{k}
+\newcommand{\xdim}{d}
+\newcommand{\adim}{m}
+\newcommand{\nsamples}{T}
+\newcommand{\sampiter}{t}
+\newcommand{\nump}{r}
+\newcommand{\nparams}{n}
+\newcommand{\npparams}{m}
+\newcommand{\pparams}{\mathbf{w}}
+%\newcommand{\propparams}{\tilde{\mathbf{w}}}
+\newcommand{\propparams}{\mathbf{w}'}
+\newcommand{\qparams}{\theta}
+
+% Sets
+\newcommand{\Actions}{\mathcal{A}}
+\newcommand{\States}{\mathcal{S}}
+\newcommand{\Pfcn}{P}
+\newcommand{\PSSA}{P_{s,s'}^a}
+\newcommand{\Rfcn}{R}
+\newcommand{\RSSA}{R_{s,s'}^a}
+\newcommand{\RR}{\mathbb R}
+
+% expectation
+\newcommand{\EE}{\mathbb{E}}
+
+% functions
+\newcommand{\Qhat}{\hat{Q}}
+\newcommand{\defeq}{\doteq}
+\newcommand{\Sigmamat}{\boldsymbol{\Sigma}}
+
+\newcommand{\ident}[1]{I(#1)}
+\newcommand{\hatident}[1]{\hat{I}(#1)}
+\newcommand{\thresh}[1]{f_{#1}}
+\newcommand{\threshstar}{f^*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+
+\title{General Value Functions in Robots: A Survey}
+
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the \iclrfinalcopy macro remains commented out below.
+% Non-anonymous submissions will be rejected without review.
+
+\author{Samuel Neumann \\ %\thanks{}
+Department of Computing Science\\
+University of Alberta\\
+Edmonton, Alberta, Canada \\
+\texttt{sfneuman@ualberta.ca} \\
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+\begin{document}
+
+\maketitle
+
+\bibliography{survey}
+\bibliographystyle{style/iclr2023_conference}
+
+\end{document}
