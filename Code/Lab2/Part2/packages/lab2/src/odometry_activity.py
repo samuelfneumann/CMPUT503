@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Functions in this file are taken from and adapted from
+# Functions in this file are taken and adapted from the Duckietown MOOC:
 # https://github.com/duckietown/mooc-exercises/tree/daffy/modcon/solution/04-Odometry
 
 from duckietown_msgs.msg import WheelEncoderStamped

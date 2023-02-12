@@ -2,9 +2,6 @@
 
 # Adapted from the Duckietown MOOC:
 #   https://github.com/duckietown/mooc-exercises/blob/daffy/modcon/solution/src/encoder_pose/src/encoder_pose_node.py
-#
-# Specifically, I referenced the following file heavily:
-#   https://github.com/duckietown/mooc-exercises/blob/daffy/modcon/solution/src/encoder_pose/src/encoder_pose_node.py
 
 
 from duckietown.dtros import DTROS, NodeType, TopicType
