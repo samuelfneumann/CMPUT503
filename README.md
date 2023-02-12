@@ -6,10 +6,11 @@ University of Alberta.
 
 ## Structure
 
-In this repository, you'll find two main directories:
+In this repository, you'll find a few main directories:
 
-- `Notes`: holds some notes from the class
 - `Code`: holds the code we write/run in the labs
+- `Notes`: holds some notes from the class
+- `Survey`: `tex` files to generate a pdf document of a survey of GVFs in robotics
 
 Within the `Code` directory, each lab has its own sub-directory named `LabX`,
 where `X` is the lab number. This directory holds all the data, code, and
