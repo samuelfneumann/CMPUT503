@@ -1,0 +1,9 @@
+<launch>
+  <arg name="veh"/>
+  <arg name="map_file" default="hub"/>
+  <group ns="$(arg veh)">
+    <node pkg="augmented_reality_apriltag" type="augmented_reality_apriltag.py" name="augmented_reality_apriltag" output="screen">
+    </node>
+  </group>
+
+</launch>

@@ -1,0 +1,31 @@
+# parameters for deadreckoning_node
+
+# How frequently to publish odometry
+publish_hz: 10.0
+
+# Max allowable age of last encoder message, after which
+# linear and angular velocities are set to zero
+encoder_stale_dt: 1.0
+
+# Should be specified elsewhere
+ticks_per_meter: 656
+
+# Lateral distance between the center of the two wheels (in meters)
+wheelbase: 0.1
+
+# parent reference frame name
+parent_frame: "world"
+
+# child reference frame name
+child_frame: "odometry"
+
+# Starting position
+start_x: 0.32
+start_y: 0.32
+start_z: 0.0
+
+# Starting angle (default here is 90°, facing along positive y-axis)
+start_yaw: 90 # degrees
+
+# Verbose output
+debug: False

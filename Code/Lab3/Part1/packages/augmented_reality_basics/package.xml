@@ -1,0 +1,11 @@
+<package>
+  <name>augmented_reality_basics</name>
+  <version>0.1.0</version>
+  <description>
+		  Part 1 of Lab 3 for CMPUT 503
+  </description>
+  <maintainer email="sfneuman@ualberta.ca">Samuel Neumann</maintainer>
+  <license>None</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

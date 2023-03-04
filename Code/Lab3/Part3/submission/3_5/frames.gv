@@ -1,0 +1,35 @@
+digraph G {
+"world" -> "odometry"[label=" Broadcaster: /csc22939/deadreckoning_node\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1677613972.472\nOldest transform: 1677613967.571\n"];
+"csc22939/right_wheel_axis" -> "csc22939/right_wheel"[label=" Broadcaster: /csc22939/right_wheel_encoder_node\nAverage rate: 30.226\nBuffer length: 4.863\nMost recent transform: 1677613972.468\nOldest transform: 1677613967.605\n"];
+"csc22939/right_motor" -> "csc22939/right_wheel_axis"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/left_wheel_axis" -> "csc22939/left_wheel"[label=" Broadcaster: /csc22939/left_wheel_encoder_node\nAverage rate: 30.206\nBuffer length: 4.867\nMost recent transform: 1677613972.495\nOldest transform: 1677613967.629\n"];
+"csc22939/left_motor" -> "csc22939/left_wheel_axis"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"world" -> "at_fixed_63"[label=" Broadcaster: /at_63_static\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/base" -> "csc22939/bottom_plate"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/footprint" -> "csc22939/base"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/base" -> "csc22939/left_motor"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/base" -> "csc22939/right_motor"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/bottom_plate" -> "csc22939/caster_wheel"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/bottom_plate" -> "csc22939/side_plate_left"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/bottom_plate" -> "csc22939/side_plate_right"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/bottom_plate" -> "csc22939/top_plate"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/camera_frame" -> "csc22939/camera_optical_frame"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/camera_support" -> "csc22939/camera_frame"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/camera_mount" -> "csc22939/camera_support"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/top_plate" -> "csc22939/camera_mount"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"odometry" -> "csc22939/footprint"[label=" Broadcaster: /footprint_to_odomery\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/interaction_plate" -> "csc22939/tag_mount"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/top_plate" -> "csc22939/interaction_plate"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/top_plate" -> "csc22939/back_bumper"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/top_plate" -> "csc22939/front_bumper"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/top_plate" -> "csc22939/hat_support"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/top_plate" -> "csc22939/side_cover_left"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"csc22939/top_plate" -> "csc22939/side_cover_right"[label=" Broadcaster: /csc22939/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"world" -> "at_fixed_22"[label=" Broadcaster: /at_22_static\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"world" -> "at_fixed_67"[label=" Broadcaster: /at_67_static\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"world" -> "at_fixed_8"[label=" Broadcaster: /at_8_static\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1677613972.5402777"[ shape=plaintext ] ;
+}->"world";
+}

@@ -1,0 +1,10 @@
+# LIST YOUR APT PACKAGES HERE
+python3-cv-bridge
+python3-ruamel.yaml
+python3-opencv
+python3-yaml
+python3-cv-bridge
+ros-noetic-cv-bridge
+python3-rosbag
+ros-noetic-vision-opencv
+ros-noetic-tf2-geometry-msgs

@@ -1,0 +1,7 @@
+# LIST YOUR DUCKIETOWN PYTHON3 PACKAGES HERE
+# NOTE: only place Duckietown libraries here; these libraries will be resolved to the latest available version and pinned; pin a specific version only if necessary
+
+# ATags3 Python bindings
+dt_apriltags>=3.1.7
+
+duckietown-utils-daffy

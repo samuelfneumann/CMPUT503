@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package>
+  <name>lab3</name>
+  <version>1.0.0</version>
+  <description>Part 2 of Lab 3</description>
+
+  <maintainer email="sfneuman@ualberta.ca">Samuel Neumann</maintainer>
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

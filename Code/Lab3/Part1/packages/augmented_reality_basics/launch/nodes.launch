@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+	<group ns="$(arg veh)">
+		<param name="/$(arg veh)/augmented_reality_basics_node/map_file" value="$(arg map_file)" />
+
+		<node pkg="lab3" type="augmented_reality_basics_node.py" name="augmented_reality_basics_node"  output="screen">
+			<remap from="camera_node/image/compressed" to="/$(arg veh)/camera_node/image/compressed"/>
+			<remap from="camera_node/camera_info" to="/$(arg veh)/camera_node/camera_info"/>
+		</node>
+	</group>
+</launch>

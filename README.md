@@ -76,10 +76,31 @@ instructions for more information about what we actually did for the lab. To
 run the code for the lab:
 
 ```bash
-cd ./Code/Lab2
+cd ./Code/Lab2/PartX  # Replace X with the relevant assignment part
 dts devel build -f -H MY_ROBOT.local
 dts devel run -f -H MY_ROBOT.local
 ```
+
+### Lab 3
+
+The code for lab 3 is in `./Code/Lab3`. Lab 3 was concerned with two things:
+
+1. Localization with sensor fusion (odometry and apriltags)
+2. Lane following
+
+The lab instructions can be found at `./Code/Lab3/lab3.pdf`. See those
+instructions for more information about what we actually did for the lab. To
+run the code for the lab:
+
+```bash
+cd ./Code/Lab3/PartX  # Replace X with the relevant assignment part
+dts devel build -f -H MY_ROBOT.local
+dts devel run -f -H MY_ROBOT.local
+```
+
+For my solution to lab 3, **all** code was taken or adapted from
+[dt-core](https://github.com/duckietown/dt-core).
+
 
 ## More Information
 
