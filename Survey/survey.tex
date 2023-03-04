@@ -1,4 +1,3 @@
-
 \documentclass{article} % For LaTeX2e
 \usepackage{style/iclr2023_conference,times}
 
@@ -135,7 +134,7 @@
 \newtheorem{remark}[theorem]{Remark}
 
 
-\title{General Value Functions in Robots: A Survey}
+\title{A Survey of General Value Functions and Robotics}
 
 % Authors must not appear in the submitted version. They should be hidden
 % as long as the \iclrfinalcopy macro remains commented out below.
@@ -163,6 +162,309 @@ Edmonton, Alberta, Canada \\
 \begin{document}
 
 \maketitle
+
+% TODO: topic sentences
+
+\section{Introduction}%
+\label{sec:introduction}
+
+% For many years people have contemplated the idea of coexistence with robots, something that has only existed in fiction
+% until now. In fact, the term \textit{robot} was first used in the 1920's in a Czech play \textit{Rossumovi Univerzální
+% Roboti} \citep{rur}. In this play, humans have created \textit{robots}. These robots are identical
+% copies of humans and are made of organic matter, able to act and think on their own. Yet, these robots do not have human souls and are used as a form
+% of slave labour until they revolt and eradicate the human race.
+% Since this time, the human perception of robots has changed dramatically. Nevertheless, the desire for coexistence with
+% robotic devices which can assist the human race still persists.
+
+% Such a coexistence between devices and humans would require these robotic devices to continually learn over their
+% lifetime in order to adapt to changing environmental, political, and socioeconomic conditions. Robots would
+% require the ability to learn about and adapt to humans in real-time. A popular method for computational devices to learn
+% based on reward signals is reinforcement learning.
+
+% In the reinforcement learning problem, an intelligent, computational device such as a robot exists in some environment
+% such as our world. The device can interact with the world and receives rewards for the actions it takes. The goal is to
+% maximize reward over time.
+
+Robotics is a vast field encompassing ideas from disciplines such as mechanical engineering to artificial intelligence.
+From the view of artificial intelligence, the goal is to create robots which are autonomous and can learn in real
+time. The emphasis is placed on \textit{learning}. A robot should be able to learn about and adapt its behaviour to
+its environment.
+
+The problem of creating autonomous robots using artificial intelligence has been proven to be difficult. A central issue
+is that the world is partially observable, and many observations which are needed to make informed decisions are not
+available to the robot. Unlike robots, humans are able to make many predictions about the world in short periods of
+time, and such predictions inform the decisions we make. For example, if you need to make it to the airport before 9:30
+a.m., you can make an informed guess on what time to leave your house. You can do this even though the amount of time it
+takes to drive to the airport is not directly known before-hand. The human brain is excellent at making multiple
+predictions about the future and taking all of these predictions into account to make an informed decision. This
+phenomenon though has proven difficult for robots.
+
+This paper is a survey of methodologies used to account for such behaviour in robots. In particular, this paper
+considers the reinforcement learning formalism and how general value functions (GVFs) can be used as predictive state
+representations to enable robots to make such informed decisions.
+
+\section{A Short Summary of Reinforcement Learning and General Value Functions}%
+
+Reinforcement learning is a way to formalize sequential decision making. In reinforcement learning, an intelligent agent
+(for example, a robot) finds itself in some environment and must take actions which alter the environmental state. Upon
+taking an action, the agent receives a reward. The goal of the agent is to maximize rewards, and it must therefore learn
+which actions lead to high rewards.
+
+This process is modelled as a Markov Decision Process which is represented as a tuple $(\mathscr{S}, \mathscr{A}, p,
+\gamma)$, where $\mathscr{S}$ is the set of possible states, $\mathscr{A}$ is the set of possible actions, and $p(s', r
+\mid s, a)$ is the transition dynamics which measures the probability density of transitioning to state $s'$ and
+receiving reward $r$ after taking action $a$ in state $s$\footnote{Here, we consider continuous state spaces and
+continuous rewards, but it is also possible to consider discrete state spaces and discrete reward by considering $p$
+to be a probability mass function.}. The discount factor, $\gamma \in \mathbb{R}$ determines the relative importance of
+near and future rewards. The actions the agent takes in a state $s \in \mathscr{S}$ are drawn from its policy $a \sim
+\pi(\cdot \mid s)$, which is a function mapping states to probability distributions over actions. The agent must learn a
+policy which selects actions to maximize the reward received.
+
+A popular method to learn which actions lead to high rewards is through value functions. A state-value function is a function
+which measures the expected, discounted sum of future rewards attainable after some state $s \in \mathscr{S}$ when following the agent's policy:
+\begin{equation}
+	v_{\pi}(s) = \mathbb{E}_{\pi}\left[G_{t} \mid S_{t} = s \right] = \mathbb{E}_{\pi}\left[ \sum\limits_{k=1}^{T}
+	\gamma^{k-1} R_{t + k} \mid S_{t} = s \right]
+\end{equation}
+where $T$ denotes the final time step, which may be infinite, and $G_{t}$ is defined implicitly. An action-value
+function measures the expected, discounted
+sum of future rewards attainable after taking some action $a \in \mathscr{A}$ in state $s \in \mathscr{S}$ and then following
+the agent's policy thereafter:
+\begin{equation}
+	q_{\pi}(s, a) = \mathbb{E}_{\pi}\left[G_{t} \mid S_{t} = s, A_{t} = a \right] = \mathbb{E}_{\pi}\left[ \sum\limits_{k=1}^{T}
+	\gamma^{k-1} R_{t + k} \mid S_{t} = s, A_{t} = a \right]
+\end{equation}
+
+Value functions can be generalized to measure the expected, discounted sum of any future signal. The future signal is
+referred to as the \textit{cumulant} while the discount factor is referred to as the \textit{time scale}. These general
+value functions (GVFs) can be used both to answer predictive questions about the future and to generate
+predictive state representations which, roughly speaking, are predictions about the state of the environment
+which are not directly observable. For example, a robot could use GVFs to predict how long it might take to drive to the
+airport. Such predictive state representations are useful as they can be used to inform a robot's real-world decisions.
+In the next section, we provide a survey on research which has used GVFs on robots both to both answer predictive
+questions about the robot's state and to generate predictive state representations.
+
+\section{A Survey of GVFs in Robots}%
+
+One of the first major breakthroughs in utilizing GVFs in robotics was the Horde architecture \citep{sutton2011horde}.
+This architecture was designed to allow a robot to answer many predictive or goal-oriented questions about it or its
+environment. Each question is answered by a single reinforcement learning agent which learns a GVF. Each of these GVF
+learners is referred to as a daemon, and has its own policy, timescale, and cumulant corresponding to the question the
+daemon answers. \cite{sutton2011horde} demonstrated that Horde could be used to learn in real-time on a mobile robot
+to accurately predict the answers to questions such as:
+\begin{enumerate}
+	\item \textit{How much time will elapse before I hit an obstacle?}
+	\item \textit{How much time do I need in order to stop before hitting the obstacle?}
+\end{enumerate}
+The authors also demonstrated that Horde could be used to learn goal-oriented behaviours in real-time on a mobile robot.
+In particular, the authors showed that the Horde architecture could be used to train a mobile robot to stay near light,
+even when the robot was trained under a random behaviour policy.
+
+\cite{modayil2012nexting} showed that \textit{nexting}, the ability of humans to predict what might happen next,
+is possible on robots. Unlike \cite{sutton2011horde}, \cite{modayil2012nexting} focused on using GVFs to answer
+thousands of on-policy questions in parallel and at different time scales. In their experiments,
+\cite{modayil2012nexting} showed that a mobile robot could successfully predict both future state representations and
+changes in its sensor readings at multiple time scales. This was one of the first times GVFs had been used in real-time on a robot
+to answer thousands of questions about both the state of the robot and the state of the environment.
+
+Until this point, learning thousands of GVFs in parallel had only been demonstrated when learning on-policy. This was a
+significant limitation to the utility of GVFs, since an important part of life-long learning, where the robot
+continually learns over the course of its lifetime, if off-policy learning. \cite{white2012scaling} demonstrated the
+ability of a mobile robot to learn thousands of GVFs off-policy and in real-time using the Horde architecture
+\citep{sutton2011horde} and a random behaviour policy. To do so, learning algorithms which are stable under
+off-policy updating such as GTD$(\lambda)$ \citep{maei2011gradient} were utilized. This work demonstrated that
+Horde could be utilized to learn hundreds of GVFs from 6 different policies. The authors also demonstrated that their
+methodology scaled to many policies. Using the same, random behaviour policy, the authors learned GVFs for 1,000
+randomly generated policies over 4 different time scales. This demonstrated that learning about many
+different behaviours (through GVFs) is possible in real-time on a robot. Computation was performed on a laptop via a
+wireless link to the robot, but given sufficient computational power these computations could have been performed
+directly on the robot. This was the first demonstration of large-scale off-policy learning of GVFs in real-time on a
+robot.
+
+A large area of research in robotics is modular prosthetic limbs, and how these limbs can be properly controlled by
+humans. Such a task has proven difficult due to a disparity between the number of electrical signals the human user can
+send to the prosthetic limb through muscle tissue and the degrees of freedom of the prosthetic limb's many actuators.
+GVFs may be able to rectify this issue and have been used in the past to increase the utility of prosthetic limbs
+\citep{sherstan2020representation,parker2019exploring,pilarski2013realtime,vassan2018context}.
+
+\cite{pilarski2016steps} used approximately 18,000 GVFs to predict information about the velocity, position, impedance,
+and temperature of the many actuators in a robotic prosthetic arm. After only six minutes of training, the prosthetic
+arm could not only detect errors due to human perturbation but could also anticipate when future errors would
+occur.
+
+\cite{gunther2018predictions} used GVFs to learn to predict and anticipate signals on a robotic prosthetic arm.
+The stream of sensor data from the robotic arm was transmitted via UDP packets of 3,520 bits. These bits were then used
+as both state inputs and cumulants for a first Horde of GVFs (one GVF for each bit). Using the prediction of this first
+Horde as input, a second Horde of GVFs predicted surprise as unexpected daemon error (UDE)
+\citep{white2015developing}, a measure of unexpected change in predicted signal due to changes in the environment. UDE
+compares the prediction error of the current signal to the average past prediction error and
+will remain low both during regular learning and when observing noise in the learned signal. UDE will only significantly
+increase if changes in the environment alter the TD error of the learned signal. In this way, UDE can be viewed as a
+sort of surprise due to changes in the environment. In their experiments, \cite{gunther2018predictions} showed that a
+robotic prosthetic arm was able to learn to anticipate surprise,
+measured as UDE, when it was perturbed in a recurring fashion. \cite{gunther2018predictions} suggested that abstract
+predictive models such as predictions of surprise could serve to increase a robots understanding of itself and its
+environment under continual learning.
+
+Humans are excellent at utilizing past experiences to generalize to new situations; one major issue with GVFs in
+robotics is that when a GVF is newly added in the middle of training, it cannot utilize the past experience of the
+robot. In a continual learning setting on a prosthetic arm, \cite{sherstan2018accelerating} demonstrated that successor
+representations \citep{dayan1993improving} could be used to improve both sample efficiency and learning speed when
+incrementally adding new GVFs during training. In their experiments, \cite{sherstan2018accelerating} had a human user
+control a robot arm by guiding its end effector through a maze 12 times over 50 minutes. GVFs for six different
+predictive targets were learned: the current, position, and speed of both the elbow and shoulder joints. Every 2,000
+steps a new GVF was added, and GVFs were learned from two different sets of features -- successor representation
+features and direct state features. They found that successor representations improved both the sample efficiency and
+speed of learning of the newly added GVFs.
+
+Until this point, GVFs were used to answer a question at a specific time scale. For example, \textit{if I drive
+straight for \textbf{ten seconds}, how soon until I hit a wall?} \cite{sherstand2019gamma} introduced $\Gamma$-nets,
+which allow GVFs to generalize over time scale. $\Gamma$-nets work by training a standard GVF with two additional inputs
+-- the timescale parameter $\gamma$ and the expected number of steps until termination $\tau = \frac{1}{1 - \gamma}$. In
+this way, a GVF can predict the answer to some question at a given time, the time indicated by $\gamma$.
+\cite{sherstand2019gamma} showed that $\Gamma$-nets could accurately predict the shoulder joint speeds of a robotic
+prosthetic arm at multiple time scales in the future. In their experiments, the end effector of a robotic arm was guided
+through a wire maze by a human controller. They trained three GVFs and one $\Gamma$-net to predict the shoulder joint
+speed at three different time scales, approximately 0.33, 1, and 2 seconds into the future. At each time scale, the
+predictions of the $\Gamma$-net were as accurate as the corresponding GVF, yet the $\Gamma$-net was significantly more
+flexible and possessed fewer parameters than the three GVFs combined.
+
+Finally, \cite{fardi2020machine} demonstrated that a robotic exoskeleton, the Indego exoskeleton, could utilize GVFs to
+learn the walking preferences of a human user. This was the first time GVFs had been used as prediction mechanisms for
+lower-limb controlled robotic prosthetics. The Indego exoskeleton is intended to assist humans in walking and has
+actuated hip and knee joints. In their experiments, \cite{fardi2020machine} had a human user control the exoskeleton by
+selecting three different walking speeds (slow, medium, fast) and two different walking directions (turn left, turn
+right). GVFs were used to anticipate the next most likely walking mode to be selected by the user at an accuracy of
+approximately $83\%$, almost double that of the non-adaptive baseline strategy.
+
+\section{Conclusion}%
+\label{sec:conclusion}
+
+A central barrier to applications of robotics to real-world problems is the inherent partial observability of our world.
+Such partial observability limits robotics by providing insufficient data to make informed decisions. One method to deal
+with such partial observability is the use of general value functions (GVFs) to form predictive state representations.
+GVFs have been used to improve both mobile and manipulator robots and hold much promise for increasing the applicability
+of robots to real-life situations.
+
+
+% \section{Notes}
+
+% - Much research on GVFs for robotics has been on using GVFs for predictive state representations: roughly predicting
+% something about the state of the robot which is not directly observable.
+% - There has been a lot of research on RL in robotics including using RL to learn complex controllers (SAC). In this
+% paper we focus on robots + GVFs.
+% - There are two main ways that GVFs can be used. They can be used to predict external or internal phenomena.
+% - Maybe it's good to go chronologically. E.g. GVFs were first used as PSRs using the Horde architecture where the
+% authors showed that a ton of GVFs could be learned in real time on a robot.
+% - Can also use Adam's thesis
+
+
+% Horde:
+
+% \begin{itemize}
+%     \item Introduced the Horde architecture of daemons, which was an architecture for learning thousands of GVFs in parallel on a
+%         robot.
+%     \item Using a GVF, they learned a light-seeking policy from a random behaviour policy. This demonstrated that it is
+%         possible to learn goal-directed behaviour from GVFs.
+%     \item  Used the holonomic Critterbot platform.
+% \end{itemize}
+
+% Multi-timestep nexting
+
+% \begin{itemize}
+%     \item  "'Nexting' is continually predicting what will happen next in an immediate, personal sense"
+%     \item Showed the ability of a "robot to \textbf{next in real-time}, predicting thousands of features of the world's state,
+%         including all sensory inputs at multiple timescales"
+%     \item Showed that it is possible with GVFs to predict when state observation features would be present (tile coded)
+%     \item Drawback: on-policy only
+% \end{itemize}
+
+% Scaling lifelong:
+
+% \begin{itemize}
+%     \item Until now, thousands of GVFs had only been shown to be able to be learned on-policy (nexting paper, predicting
+%         sensour outputs and features). This paper explores the learning of thousands of GVFs off-policy.
+%     \item  Showed that you can use GTD(lambda) to simultaneously learn hundreds of predictions for 5 target policies
+%         while following a single random behaviour policy.
+%     \item  Finally, they demonstrated that the value functions of thousands of policies can be learned in real-time on a
+%         robot.
+%     \item  They did this all using the Horde architecture.
+% \end{itemize}
+
+% Sherstan PhD:
+
+% \begin{itemize}
+%     \item Continual learning is useful for robots since they cannot possibly know everything. They would benefit society
+%     \item  Robots need a model of the environment to figure out what to do. "GVFs are one framework for representing
+%         predictive models"
+%     \item Compositionality of GVFs: Chapter 6
+%     \item Maybe use a similar format to what is done in the GVF section: chronologically from when GVFs were first discovered. But! Don't dwell on GVFs too much, we want them with robotics.
+%     \item You can reference the section on using GVFs with prosthetic limbs for more references etc.
+% \end{itemize}
+
+% Introspective
+% \begin{itemize}
+%     \item Only about GVFs, not robots
+% \end{itemize}
+
+% Steps toward knowledgeable neuroprosthesis
+
+% \begin{itemize}
+%     \item Used ~11k GVFs
+%     \item Used ~7k GVFs to measure introspective signals
+%     \item Over only 6mins of learning, the robotic arm "could build build up consistent forecasts of the data stream,
+%         detect unexpected errors in these forecasts, and forecast areas of the data stream where future errors in its
+%         predictions may occur".
+%     \item GVFs were predicting the position, velocity, impedance, and temperatures of the robotic arm's actuators.
+%     \item  "Topology of GVFs for a diverse, multi-timescale predictive state representation that can be used for
+%         improving control"
+% \end{itemize}
+
+% Predictions, Surprise, and Predictions of Surprise
+
+% \begin{itemize}
+%     \item Predictive models of state are need for lifelong, continual learning
+%     \item They used GVFs to predict sensorimotor data and surprise.
+%     \item "Showed how GVFs can be used to make thousands of predictions about external and internal signals at different
+%         time scaled on a real-world robot."
+%     \item In a proof-of-concept demo, they showed that "perturbing the robotic arm in a recurring pattern" increased the
+%         surprise signal. They also showed that the surprise signal could not only be learned, but could also be
+%         anticipated.
+%     \item The authors "suggest that predictions of surprise like this can serve as a way to implement more abstract
+%         predictive models, improving the agent's ability to continually learn about itself and its environment"
+%     \item  Use the unexpected demon error as a measure of surprise. UDE: comparison about current prediction error to
+%         average previous prediction error. UDE is in Adam's thesis.
+%     \item "UDE can be seen as a measure of surprise as it takes previous experience into account and only increases when
+%         the current experience significantly differs from previous experience"
+%     \item Main contribution: "demo that predictions of raw perceptual data from an agent's data stream \textbf{as well as
+%         predictions of surprise with respect to this data stream} can be used to build more powerful and abstract
+%         predictive models of an agents operation and interactions with its world"
+% \end{itemize}
+
+% Accelerating
+
+% \begin{itemize}
+%     \item "we show that using SR-based predictions can improve sample efficiency and learning speed in continual
+%         learning setting where \textit{new predictions are incrementally added and learned over time}."
+%     \item  "User controlled a robot arm with a joystick to trace a circuit through a wire maze. The maze was completed
+%         approximately 50 times in 12 minutes."
+%     \item 6 different prediction targets: current, position, and speed of the should and elbow joints. A new predictor
+%         was activated every 2k steps.
+% \end{itemize}
+
+% Gamma Nets
+% \begin{itemize}
+%     \item Introduced gamma nets: a method for generalize GVF estimation over timescales allowing a single GVF to be
+%         trained and queried for arbitrary timescales (i.e. If I continue straight for n steps, how soon until I hit the
+%         wall?)
+%     \item Gamma nets allow a GVF to generalize over timescales by providing the discount factor gamma as an input to the
+%         GVF.
+%     \item Downside: for a given prediction problem, gamma must be fixed and cannot change. GVFs usually allow gamma to
+%         change on each time step.
+%     \item  Similar robotic task to "accelerating". Network inputs to the GVF were the discount gamma as well as the
+%         expected number of steps until termination $\frac{1}{1 - \gamma}$
+%     \item They used gamma nets to predict the shoulder joint speed at multiple timescales accurately.
+% \end{itemize}
 
 \bibliography{survey}
 \bibliographystyle{style/iclr2023_conference}
