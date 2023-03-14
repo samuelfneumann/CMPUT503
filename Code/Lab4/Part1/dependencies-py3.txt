@@ -1,0 +1,10 @@
+# LIST YOUR PYTHON3 PACKAGES HERE
+# NOTE: only place non-Duckietown libraries here; pin versions only if necessary
+
+ruamel.yaml
+
+comptests-z6
+
+procgraph-z6
+ros_node_utils>=2.0.0
+compmake-z6>=6.0.9

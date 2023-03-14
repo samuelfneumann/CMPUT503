@@ -101,6 +101,25 @@ dts devel run -f -H MY_ROBOT.local
 For my solution to lab 3, **all** code was taken or adapted from
 [dt-core](https://github.com/duckietown/dt-core).
 
+### Lab 4
+
+The code for lab 4 is in `./Code/Lab4`. Lab 4 was concerned with three things:
+
+1. Intersection navigation
+2. Vehicle avoidance
+3. Vehicle following
+
+The lab instructions can be found at `./Code/Lab4/lab4.pdf`. See those
+instructions for more information about what we actually did for the lab. To
+run the code for the lab:
+```bash
+cd ./Code/Lab4/Part1
+dts devel build -f -H MY_ROBOT.local
+dts devel run -f -H MY_ROBOT.local
+```
+
+For my solution to lab 4, I adapted my code from lab 3. Hence, much code is
+taken or adapted from [dt-core](https://github.com/duckietown/dt-core).
 
 ## More Information
 

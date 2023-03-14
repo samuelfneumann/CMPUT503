@@ -1,0 +1,7 @@
+ff_left:        0.8
+ff_straight:    0.0
+ff_right:      -3.0
+
+time_left_turn:     3.0
+time_right_turn:    2.0
+time_straight_turn: 3.0

@@ -1,0 +1,130 @@
+# TEMPLATED
+version: "2.1"
+workflows:
+  version: "2"
+  build:
+    jobs:
+    - build-docs-daffy-staging: &staging
+        context: pip-staging
+        filters:
+          branches:
+            only: /daffy-staging.*/
+    - unit-tests-from-parent-daffy-staging: *staging
+    - build-docs-daffy-production: &production
+        context: production
+        filters:
+          branches:
+            ignore: /daffy-staging.*/
+    - unit-tests-from-parent-daffy-production: *production
+
+jobs:
+  build-docs: &build-docs
+    docker:
+    - image: ${DOCKER_REGISTRY}/duckietown/aido-submission-ci-test:daffy
+      auth:
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+    steps:
+    - setup_remote_docker
+    - checkout
+
+    - run:
+        name: Set dts version
+        command: |
+          pip install -U pip 
+          pip install -U duckietown-shell
+          dts --set-version "$DTS_VERSION" exit
+
+    - run:
+        name: Python stats
+        command: |
+          mkdir -p build-stats
+          env | sort | tee  build-stats/env.txt
+          pip list   | sort | tee  build-stats/pip-list.txt
+          pip freeze | sort | tee  build-stats/pip-freeze.txt
+    - store_artifacts:
+        path: build-stats
+        destination: build-stats
+
+    - run:
+        name: Pull the image
+        command: |
+          dts devel pull --tag daffy
+
+    - run:
+        name: Build the docs
+        command: |
+          dts devel docs build --tag daffy -f
+
+
+    - store_artifacts:
+        path: html
+        destination: html
+    - run:
+        name: Create a .tgz of  the folder `html` into html/package.tgz
+        command: |
+          # XXX: this a workaround for bugs in devel docs
+          rm -f html/package.tgz
+          tar -czf package.tgz -C html .
+          mv package.tgz html/package.tgz
+          tar tfz html/package.tgz
+    - store_artifacts:
+        path: html/package.tgz
+        destination: out/package.tgz
+
+  unit-tests-from-parent: &unit-tests
+    resource_class: large
+    docker:
+    - image: ${DOCKER_REGISTRY}/duckietown/dt-ros-commons:daffy
+
+    environment:
+      DUCKIETOWN_DATA: /data
+      DUCKIETOWN_ROOT: /
+
+    steps:
+
+    - checkout
+    - run:
+        name: Install dts
+        command: |
+          python3 -m pip install -U pip
+          python3 -m pip check
+          python3 -m pip install --no-cache-dir  -U duckietown-shell
+          python3 -m pip check
+          dts --set-version "$DTS_VERSION" exit
+    - run:
+        name: deps
+        command: |
+          python3 -m  pip install -r dependencies-py3.txt
+    - run:
+        name: apt
+        command: |
+          dt-apt-install dependencies-apt.txt
+    - run:
+        name: deps
+        command: |
+          ls -la /code/catkin_ws/src
+          ln -s  `pwd` /code/catkin_ws/src/dt-core
+          ls -la /code/catkin_ws/src
+          . /opt/ros/noetic/setup.sh && catkin build --workspace ${CATKIN_WS_DIR}/
+          python3 -m pip install duckietown-utils-daffy
+    - run:
+        name: run tests
+        command: |
+          mkdir /data
+          mkdir /data/config
+
+          echo 'config echo 1' > ~/.compmake.rc
+
+          . /opt/ros/noetic/setup.sh && . ${CATKIN_WS_DIR}/devel/setup.bash && make test-circle
+
+          find . -name '*pickle' -delete
+          find . -name 'compmake' -print | xargs rm -rf
+
+    - store_artifacts:
+        path: out
+        destination: out
+  unit-tests-from-parent-daffy-staging: *unit-tests
+  unit-tests-from-parent-daffy-production: *unit-tests
+  build-docs-daffy-production: *build-docs
+  build-docs-daffy-staging: *build-docs

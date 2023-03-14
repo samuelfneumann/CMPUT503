@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package>
+  <name>lab4</name>
+  <version>1.0.0</version>
+  <description>todo</description>
+
+  <maintainer email="sfneuman@ualberta.ca">Samuel Neumann</maintainer>
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>
