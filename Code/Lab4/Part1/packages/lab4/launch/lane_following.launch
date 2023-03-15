@@ -19,8 +19,8 @@
 		<arg name="anti_instagram" default="true" />
 		<arg name="/camera/raw" value="true"/>
 		<arg name="/camera/rect" value="true"/>
-		<arg name="LED" value="false"/>
-        <arg name="/LED/emitter" value="false"/>
+		<arg name="LED" value="true"/>
+        <arg name="/LED/emitter" value="true"/>
 		<arg name="/LED/detector" value="true"/>
 		<arg name="/LED/pattern_switch" value="true"/>
 

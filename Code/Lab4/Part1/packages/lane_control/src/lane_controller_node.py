@@ -108,7 +108,6 @@ class LaneControllerNode(DTROS):
 
         # Need to create controller object before updating parameters, otherwise it will fail
         self.controller = LaneController(self.params)
-        # self.updateParameters() # TODO: This needs be replaced by the new DTROS callback when it is implemented
 
         # Initialize variables
         self.wheels_cmd_executed = WheelsCmdStamped()
@@ -135,14 +134,6 @@ class LaneControllerNode(DTROS):
         self.sub_lane_reading = rospy.Subscriber(
             "~lane_pose", LanePose, self.cbAllPoses, "lane_filter", queue_size=1
         )
-
-        # self.sub_intersection_navigation_pose = rospy.Subscriber(
-        #     "~intersection_navigation_pose",
-        #     LanePose,
-        #     self.cbAllPoses,
-        #     "intersection_navigation",
-        #     queue_size=1,
-        # )
 
         self.sub_wheels_cmd_executed = rospy.Subscriber(
             "~wheels_cmd", WheelsCmdStamped, self.cbWheelsCmdExecuted, queue_size=1
@@ -299,6 +290,7 @@ class LaneControllerNode(DTROS):
             msg (:obj:`StopLineReading`): Message containing information about the next stop line.
         """
         # Only stop at stop lines at minimum s second intervals
+        # TODO: get s from a ROS param
         s = 7
         if msg.at_stop_line:
             if self.prev_at_stop_line_time is not None:
@@ -313,12 +305,6 @@ class LaneControllerNode(DTROS):
         self.stop_line_distance = np.sqrt(msg.stop_line_point.x**2 + msg.stop_line_point.y**2)
         self.stop_line_detected = msg.stop_line_detected
         self.at_stop_line = msg.at_stop_line
-
-        # Two other options:
-        # 1. Move this logic to drive(); here just store the current stopline
-        #    detection and previous one
-        # 2. Just increase the time in turns to ensure we get passed the next
-        #    stop line
 
     def cbAllPoses(self, input_pose_msg, pose_source):
         """Callback receiving pose messages from multiple topics.
@@ -361,13 +347,6 @@ class LaneControllerNode(DTROS):
         self.controller.update_parameters(self.params)
 
     def _cb_process_veh(self, msg):
-        # if not self.at_stop_line:
-        #     # Can no longer see a vehicle, so reset the previous vehicle's
-        #     # position
-        #     rospy.loginfo("=== Resetting previous veh")
-        #     self.prev_veh_avg_x = None
-        #     self.followed_veh_turn = None
-
         sum_x = 0
         total = len(msg.corners)
 
@@ -383,7 +362,6 @@ class LaneControllerNode(DTROS):
             if self.prev_veh_avg_x is None:
                 self.prev_veh_avg_x = avg_x
             else:
-                # Computations
                 # Compute the change in x position, which tells us which
                 # direction the followed duckiebot is moving in the camera
                 # frame
@@ -399,17 +377,7 @@ class LaneControllerNode(DTROS):
 
                 rospy.loginfo(f"=== Saw turn {self.followed_veh_turn}")
 
-        # else:
-        #     # Can no longer see a vehicle, so reset the previous vehicle's
-        #     # position
-        #     rospy.loginfo("=== Resetting previous veh")
-        #     self.prev_veh_avg_x = None
-        #     self.followed_veh_turn = None
-
-
     def drive(self):
-        # IDEA: If at stop line, then turn. Always finish the function with the
-        # lane controlling logic though!
         if self.drive_running:
             rospy.logfatal("drive is already running")
 
@@ -472,9 +440,10 @@ class LaneControllerNode(DTROS):
                 rospy.loginfo(f"    v: {v}, omega: {omega}, time: {sleep_time.value}")
                 self.publishCmd(car_control_msg)
 
+                # TODO: test if this improves intersection navigation
                 # # Before starting the turn timer, be sure that the robot is
                 # # actually moving
-                # thresh = 0.01
+                # thresh = 0.01  # TODO: get this from a ROS parameters
                 # cont = (
                 #     np.abs(self.wheels_cmd_executed.vel_left) > thresh and
                 #     np.abs(self.wheels_cmd_executed.vel_right) > thresh
@@ -497,7 +466,6 @@ class LaneControllerNode(DTROS):
                 # Stop turn
                 self.publishCmd(car_stop_msg)
                 rospy.loginfo("    Stopping turn")
-                # rospy.loginfo(f"        v: {v_stop}, omega: {omega_stop}")
 
                 # Change the LED back to the driving state
                 if self.params["~use_LEDs"].value:
@@ -524,7 +492,8 @@ class LaneControllerNode(DTROS):
                     d_err, phi_err, dt, wheels_cmd_exec,
                     self.obstacle_stop_line_distance, pose_msg
                 )
-                # TODO: This is a temporarily fix to avoid vehicle image detection latency caused unable to stop in time.
+                # TODO: This is a temporarily fix to avoid vehicle image
+                # detection latency caused unable to stop in time.
                 v = v * 0.25
                 omega = omega * 0.25
 
@@ -542,7 +511,6 @@ class LaneControllerNode(DTROS):
             car_control_msg.v = v
             car_control_msg.omega = omega
 
-            # self.led_svc(String("CAR_DRIVING"))
             self.publishCmd(car_control_msg)
 
         # Set the current time stamp, needed for lane following
