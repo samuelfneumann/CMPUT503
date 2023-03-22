@@ -121,6 +121,20 @@ dts devel run -f -H MY_ROBOT.local
 For my solution to lab 4, I adapted my code from lab 3. Hence, much code is
 taken or adapted from [dt-core](https://github.com/duckietown/dt-core).
 
+## Project
+
+The code for my graduate student project is in `./Code/Project`. This project
+was concerned with predicting which apriltag a DuckieBot would see next when
+following a set policy driving around DuckieTown.
+
+This implementation borrows heavily from my implementation of Part 3 of Lab 3.
+To run the code for this project:
+```bash
+cd ./Code/Project/Code
+dts devel build -f -H MY_ROBOT.local
+dts devel run -f -H MY_ROBOT.local
+```
+
 ## More Information
 
 To see these labs running in action, or for more information on these labs,
