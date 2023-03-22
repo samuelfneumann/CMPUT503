@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+    <arg name="veh" doc="Name of vehicle. ex: csc22939"/>
+    <arg name="pkg_name" value="learner"/>
+    <arg name="node_name" default="learner_node"/>
+    <arg name="param_file_name" default="default" doc="Specify a param file. ex: duckiebot."/>
+
+    <group ns="$(arg veh)">
+        <node name="$(arg node_name)" pkg="$(arg pkg_name)" type="$(arg node_name).py" output="screen">
+
+			<!-- Load ros parameters from config file below config -->
+            <rosparam command="load" file="$(find learner)/config/$(arg node_name)/$(arg param_file_name).yaml"/>
+        </node>
+    </group>
+</launch>

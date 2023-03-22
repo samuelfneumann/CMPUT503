@@ -1,0 +1,16 @@
+<launch>
+    <arg name="veh" doc="Name of vehicle. ex: megaman"/>
+    <arg name="pkg_name" value="camera_image"/>
+    <arg name="node_name" default="camera_image_node"/>
+    <arg name="param_file_name" default="default" doc="Specify a param file. ex: experiment_1."/>
+
+
+    <group ns="$(arg veh)">
+        <node name="$(arg node_name)" pkg="$(arg pkg_name)" type="$(arg node_name).py" output="screen" required="true">
+            <param name="veh" value="$(arg veh)" />
+
+			<remap from="~camera_topic" to="/$(arg veh)/camera_node/image/compressed"/>
+			<remap from="~img" to="/$(arg veh)/camera_image_node/image"/>
+        </node>
+    </group>
+</launch>

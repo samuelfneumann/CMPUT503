@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+    <arg name="veh"/>
+    <arg name="pkg_name" value="lab3"/>
+
+    <arg name="/camera/camera_image" default="false"/>
+    <arg name="/localization" default="false"/>
+    <arg name="/localization/deadreckoning" default="false"/>
+    <arg name="/led_emitter" default="false"/>
+
+	<arg name="/apriltags" default="false"/>
+	<arg name="/apriltags/detector" default="false"/>
+		<arg name="/apriltags/post_processor" default="false"/>
+
+	<!-- Localization -->
+    <group if="$(arg /localization)">
+		<!-- Deadreckoning node -->
+        <group if="$(arg /localization/deadreckoning)">
+            <include file="$(find deadreckoning)/launch/deadreckoning_node.launch">
+                <arg name="veh" value="$(arg veh)"/>
+            </include>
+        </group>
+    </group>
+
+	<!-- Camera Image node -->
+	<group if="$(arg /camera/camera_image)">
+		<include file="$(find camera_image)/launch/camera_image_node.launch">
+			<arg name="veh" value="$(arg veh)"/>
+		</include>
+	</group>
+
+	<!-- LED Emitter node -->
+	<group if="$(arg /led_emitter)">
+		<include file="$(find led_emitter)/launch/led_emitter_node.launch">
+			<arg name="veh" value="$(arg veh)"/>
+		</include>
+	</group>
+
+	<!-- Apriltags -->
+	<group if="$(arg /apriltags)">
+		<group if="$(arg /apriltags/detector)">
+			<include file="$(find apriltag)/launch/apriltag_detector_node.launch">
+				<arg name="veh" value="$(arg veh)"/>
+			</include>
+		</group>
+
+		<group if="$(arg /apriltags/post_processor)">
+			<include file="$(find apriltag)/launch/apriltag_postprocessing_node.launch">
+				<arg name="veh" value="$(arg veh)"/>
+			</include>
+		</group>
+	</group>
+
+	<!-- Ground Truth AprilTag Transforms -->
+	<node pkg="tf2_ros" type="static_transform_publisher" name="at_22_static" args="0.17 0.20 0 2.35 0 -1.57 world at_fixed_22" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="at_8_static" args="1.58 0.17 0 3.93 0 -1.57 world at_fixed_8" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="at_63_static" args="0.215 2.815 0 0.785 0 -1.57 world at_fixed_63" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="at_67_static" args="1.65 2.755 0 -0.785 0 -1.57 world at_fixed_67" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="at_76_static" args="0.66 1.17 0 0 0 -1.57 world at_fixed_76" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="at_15_static" args="0.66 1.83 0 0 0 -1.57 world at_fixed_15" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="at_59_static" args="1.17 1.83 0 3.142 0 -1.57 world at_fixed_59" />
+
+	<!-- Footprint to Odometry Transform -->
+	<node pkg="tf2_ros" type="static_transform_publisher" name="footprint_to_odomery" args="0 0 0 0 0 0 odometry $(arg veh)/footprint" />
+
+	<!-- Start Learner -->
+	<remap from="learner_node/detections" to="apriltag_detector_node/detections" />
+	<remap from="learner_node/odom" to="deadreckoning_node/odom" />
+	<include file="$(find learner)/launch/learner_node.launch">
+		<arg name="veh" value="$(arg veh)"/>
+		<arg name="param_file_name" value="default"/>
+	</include>
+	<!-- End Learner -->
+
+</launch>

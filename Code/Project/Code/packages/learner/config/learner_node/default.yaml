@@ -1,0 +1,7 @@
+current_state_same_count_thresh: 3
+learning_rate: 0.1
+tags_used: [8, 22, 63, 67]
+grid_dims: [3, 5]
+weights: null
+bag_cache: null
+switch: True
